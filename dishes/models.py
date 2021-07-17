@@ -3,10 +3,9 @@ from django.db import models
 
 class Ingredient(models.Model):
     title = models.CharField(max_length=50)
-    amount = models.PositiveIntegerField(default=1)
 
     def __str__(self):
-        return f"{self.title}|{self.amount}"
+        return self.title
 
 
 class Dish(models.Model):
@@ -34,8 +33,10 @@ class Order(models.Model):
 class DishIngredient(models.Model):
     dish = models.ForeignKey(Dish, on_delete=models.CASCADE)
     ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
+    amount = models.PositiveIntegerField(default=1)
 
 
 class OrderIngredient(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
+    amount = models.PositiveIntegerField(default=1)
