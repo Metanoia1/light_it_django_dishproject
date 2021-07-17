@@ -30,13 +30,18 @@ class Order(models.Model):
         return self.title
 
 
-class DishIngredient(models.Model):
+class IngredientAmount(models.Model):
+    amount = models.PositiveIntegerField(default=1)
+
+    class Meta:
+        abstract = True
+
+
+class DishIngredient(IngredientAmount):
     dish = models.ForeignKey(Dish, on_delete=models.CASCADE)
     ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
-    amount = models.PositiveIntegerField(default=1)
 
 
-class OrderIngredient(models.Model):
+class OrderIngredient(IngredientAmount):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
-    amount = models.PositiveIntegerField(default=1)
