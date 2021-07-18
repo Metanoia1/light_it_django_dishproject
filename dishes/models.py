@@ -27,6 +27,9 @@ class Order(models.Model):
         related_name="orders",
     )
 
+    class Meta:
+        ordering = ["-id"]
+
 
 class IngredientAmount(models.Model):
     amount = models.PositiveIntegerField(default=1)

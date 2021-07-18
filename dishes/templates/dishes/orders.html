@@ -5,7 +5,13 @@
 {% block content %}
 
   {% for order in orders %}
-    <p>ORDER_ID:{{ order.order.id }} -- {{order.ingredient}}-{{order.amount}}</p>
+    <p><strong>ORDER_ID:</strong> {{order.id}}</p>
+    {% for item in order.oi.all %}
+    <p>
+      <strong>ingredient:</strong> {{item.ingredient}},
+      <strong>amount:</strong> {{item.amount}}
+    </p>
+    {% endfor %}
     <hr>
   {% endfor %}
 
