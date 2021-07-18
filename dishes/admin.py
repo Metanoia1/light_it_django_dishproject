@@ -17,7 +17,7 @@ class DishAdmin(admin.ModelAdmin):
 
 
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ("title",)
+    list_display = ("id",)
     inlines = [OrderIngredientInline]
 
 

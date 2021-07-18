@@ -19,9 +19,11 @@ from django.shortcuts import redirect
 
 
 def default_view(request):
-    pass
+    return redirect("dishes:index")
 
 
 urlpatterns = [
-    path("", admin.site.urls),
+    path("", default_view),
+    path("dishes/", include("dishes.urls")),
+    path("admin/", admin.site.urls),
 ]

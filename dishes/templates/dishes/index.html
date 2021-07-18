@@ -1,0 +1,11 @@
+{% extends 'dishes/layout.html' %}
+
+{% block title %}CATALOG{% endblock %}
+
+{% block content %}
+  {% for dish in dishes %}
+    <p>{{ dish }}</p>
+    <a href="{% url 'dishes:details' dish.id %}">details</a>
+    <hr>
+  {% endfor %}
+{% endblock %}

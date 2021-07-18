@@ -1,0 +1,12 @@
+{% extends 'dishes/layout.html' %}
+
+{% block title %}ORDERS{% endblock %}
+
+{% block content %}
+
+  {% for order in orders %}
+    <p>ORDER_ID:{{ order.order.id }} -- {{order.ingredient}}-{{order.amount}}</p>
+    <hr>
+  {% endfor %}
+
+{% endblock %}
