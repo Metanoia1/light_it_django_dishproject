@@ -13,6 +13,7 @@ class Dish(models.Model):
     ingredients = models.ManyToManyField(
         Ingredient,
         through="DishIngredient",
+        related_name="dishes",
     )
 
     def __str__(self):
@@ -23,6 +24,7 @@ class Order(models.Model):
     ingredients = models.ManyToManyField(
         Ingredient,
         through="OrderIngredient",
+        related_name="orders",
     )
 
 
@@ -35,12 +37,16 @@ class IngredientAmount(models.Model):
 
 
 class DishIngredient(IngredientAmount):
-    dish = models.ForeignKey(Dish, on_delete=models.CASCADE)
+    dish = models.ForeignKey(Dish, on_delete=models.CASCADE, related_name="di")
     ingredient = models.ForeignKey(
-        Ingredient, on_delete=models.CASCADE, related_name="ingredients"
+        Ingredient, on_delete=models.CASCADE, related_name="di"
     )
 
 
 class OrderIngredient(IngredientAmount):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE)
-    ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
+    order = models.ForeignKey(
+        Order, on_delete=models.CASCADE, related_name="oi"
+    )
+    ingredient = models.ForeignKey(
+        Ingredient, on_delete=models.CASCADE, related_name="oi"
+    )

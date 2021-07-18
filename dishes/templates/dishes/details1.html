@@ -1,0 +1,23 @@
+{% extends 'dishes/layout.html' %}
+
+{% block title %}INGREDIENTS{% endblock %}
+
+{% block content %}
+
+  <form method="POST">
+    {% csrf_token %}
+    {% for ingredient in ingredients%}
+      <p>{{ ingredient.ingredient }}:</p>
+      <input class="form-control"
+        type="number"
+        name="{{ ingredient.ingredient }}"
+        value="{{ ingredient.amount }}"
+        required>
+    {% endfor %}
+    <br>
+    <div class="col-12">
+      <button class="btn btn-primary" type="submit">ORDER</button>
+    </div>
+  </form>
+
+{% endblock %}
