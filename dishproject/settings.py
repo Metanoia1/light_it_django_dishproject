@@ -20,9 +20,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = (
-    "django-insecure-y^+i^%9r6m@cpit1(gxuy&(^g^s^8a_9)b9x83d%3t301za4zu"
-)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -135,11 +132,11 @@ except ImportError as e:
 
 # FOR DEPLOYING ON HEROKU
 ##############################################################################
-
 import os
 import psycopg2
 import dj_database_url
 
+SECTET_KEY = (os.environ["SECTET_KEY"],)
 DEBUG = False
 ALLOWED_HOSTS = ["dishp.herokuapp.com"]
 MIDDLEWARE = [

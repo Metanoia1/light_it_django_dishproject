@@ -1,14 +1,29 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.views.generic import ListView, DetailView, CreateView
+from django.views import View
+
 from . import models
 
 
-def index(request):
-    dishes = models.Dish.objects.all()
-    context = {"dishes": dishes}
-    return render(request, "dishes/index.html", context)
+class DishList(ListView):
+    model = models.Dish
+    template_name = "dishes/index.html"
+    context_object_name = "dishes"
 
 
-def dish_details(request, dish_id):
+class DishDetail(DetailView):
+    model = models.Dish
+    template_name = "dishes/dish_details.html"
+    context_object_name = "dish"
+
+
+class OrderList(ListView):
+    model = models.Order
+    template_name = "dishes/orders.html"
+    context_object_name = "orders"
+
+
+def create_order(request, dish_id):
     dish = get_object_or_404(models.Dish, pk=dish_id)
     if request.method == "POST":
         order = models.Order.objects.create()
@@ -22,20 +37,6 @@ def dish_details(request, dish_id):
                 str(order_ingredient.ingredient)
             ]
             order_ingredient.save()
+        return redirect("dishes:orders")
 
-        return redirect("dishes:index")
-    ingredients = dish.di.all()
-    context = {"ingredients": ingredients}
-    return render(request, "dishes/dish_details.html", context)
-
-
-# def orders(request):
-#     orders_list = models.OrderIngredient.objects.all()
-#     context = {"orders": orders_list}
-#     return render(request, "dishes/orders.html", context)
-
-
-def orders(request):
-    order_list = models.Order.objects.all()
-    context = {"orders": order_list}
-    return render(request, "dishes/orders.html", context)
+    return render(request, "dishes/dish_details.html", {"dish": dish})

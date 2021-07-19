@@ -16,6 +16,9 @@ class Dish(models.Model):
         related_name="dishes",
     )
 
+    class Meta:
+        ordering = ["-id"]
+
     def __str__(self):
         return self.title
 

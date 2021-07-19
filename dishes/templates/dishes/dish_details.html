@@ -4,9 +4,9 @@
 
 {% block content %}
 
-  <form method="POST">
+  <form action="{% url 'dishes:order' dish.id %}" method="POST">
     {% csrf_token %}
-    {% for ingredient in ingredients%}
+    {% for ingredient in dish.di.all %}
       <p>{{ ingredient.ingredient }}:</p>
       <input class="form-control"
         type="number"
