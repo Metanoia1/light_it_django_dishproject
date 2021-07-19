@@ -136,7 +136,7 @@ import os
 import psycopg2
 import dj_database_url
 
-SECTET_KEY = (os.environ["SECRET_KEY"],)
+SECTET_KEY = os.environ["SECRET_KEY"]
 DEBUG = False
 ALLOWED_HOSTS = ["dishp.herokuapp.com"]
 MIDDLEWARE = [
