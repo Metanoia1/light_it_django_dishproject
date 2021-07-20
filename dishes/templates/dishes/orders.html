@@ -8,7 +8,7 @@
     <p><strong>ORDER_ID:</strong> {{order.id}}</p>
     {% for item in order.oi.all %}
     <p>
-      <strong>ingredient:</strong> {{item.ingredient}},
+      <strong>ingredient:</strong> {{item.ingredient.title}},
       <strong>amount:</strong> {{item.amount}}
     </p>
     {% endfor %}

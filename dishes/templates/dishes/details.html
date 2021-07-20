@@ -7,12 +7,12 @@
   <form action="{% url 'dishes:order' dish.id %}" method="POST">
     {% csrf_token %}
     {% for ingredient in dish.di.all %}
-      <p>{{ ingredient.ingredient }}:</p>
+      <p>{{ ingredient.ingredient.title }}:</p>
       <input class="form-control"
         type="number"
         min="0"
         max="10000"
-        name="{{ ingredient.ingredient }}"
+        name="{{ ingredient.ingredient.title }}"
         value="{{ ingredient.amount }}"
         required>
     {% endfor %}
