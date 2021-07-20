@@ -1,6 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.views.generic import ListView, DetailView, CreateView
-from django.views import View
+from django.views.generic import ListView, DetailView
 
 from . import models
 
@@ -27,16 +26,14 @@ def create_order(request, dish_id):
     dish = get_object_or_404(models.Dish, pk=dish_id)
     if request.method == "POST":
         order = models.Order.objects.create()
-        ingredients = dish.ingredients.all()
 
-        for ingredient in ingredients:
-            order.ingredients.add(ingredient)
-
-        for order_ingredient in order.oi.all():
-            order_ingredient.amount = request.POST[
-                str(order_ingredient.ingredient)
-            ]
+        for item in dish.di.all():
+            order_ingredient = models.OrderIngredient(
+                order=order,
+                amount=request.POST[item.ingredient.title],
+                ingredient=item.ingredient,
+            )
             order_ingredient.save()
-        return redirect("dishes:orders")
 
+        return redirect("dishes:orders")
     return render(request, "dishes/dish_details.html", {"dish": dish})
