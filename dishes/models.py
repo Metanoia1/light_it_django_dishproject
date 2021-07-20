@@ -39,7 +39,6 @@ class IngredientAmount(models.Model):
 
     class Meta:
         abstract = True
-        ordering = ["-id"]
 
 
 class DishIngredient(IngredientAmount):

@@ -12,7 +12,7 @@ class DishList(ListView):
 
 class DishDetail(DetailView):
     model = models.Dish
-    template_name = "dishes/dish_details.html"
+    template_name = "dishes/details.html"
     context_object_name = "dish"
 
 

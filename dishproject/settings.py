@@ -19,9 +19,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = (
-    "django-insecure-y^+i^%9r6m@cpit1(gxuy&(^g^s^8a_9)b9x83d%3t301za4zu"
-)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -131,29 +128,28 @@ try:
 except ImportError as e:
     print(e)
 
-
 # FOR DEPLOYING ON HEROKU
 ##############################################################################
-import os
-import psycopg2
-import dj_database_url
-
-DEBUG = False
-ALLOWED_HOSTS = ["dishp.herokuapp.com"]
-MIDDLEWARE = [
-    "django.middleware.security.SecurityMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",
-    "django.contrib.sessions.middleware.SessionMiddleware",
-    "django.middleware.common.CommonMiddleware",
-    "django.middleware.csrf.CsrfViewMiddleware",
-    "django.contrib.auth.middleware.AuthenticationMiddleware",
-    "django.contrib.messages.middleware.MessageMiddleware",
-    "django.middleware.clickjacking.XFrameOptionsMiddleware",
-]
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-DATABASE_URL = os.environ["DATABASE_URL"]
-conn = psycopg2.connect(DATABASE_URL, sslmode="require")
-DATABASES = {
-    "default": dj_database_url.config(conn_max_age=600, ssl_require=True),
-}
+# import os
+# import psycopg2
+# import dj_database_url
+#
+# DEBUG = False
+# ALLOWED_HOSTS = ["dishp.herokuapp.com"]
+# MIDDLEWARE = [
+#     "django.middleware.security.SecurityMiddleware",
+#     "whitenoise.middleware.WhiteNoiseMiddleware",
+#     "django.contrib.sessions.middleware.SessionMiddleware",
+#     "django.middleware.common.CommonMiddleware",
+#     "django.middleware.csrf.CsrfViewMiddleware",
+#     "django.contrib.auth.middleware.AuthenticationMiddleware",
+#     "django.contrib.messages.middleware.MessageMiddleware",
+#     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+# ]
+# STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+# STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+# DATABASE_URL = os.environ["DATABASE_URL"]
+# conn = psycopg2.connect(DATABASE_URL, sslmode="require")
+# DATABASES = {
+#     "default": dj_database_url.config(conn_max_age=600, ssl_require=True),
+# }
