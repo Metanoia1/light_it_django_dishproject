@@ -26,6 +26,7 @@ def create_order(request, dish_id):
     dish = get_object_or_404(models.Dish, pk=dish_id)
     if request.method == "POST":
         order = models.Order.objects.create()
+        order_ingredient_list = []
 
         for item in dish.di.all():
             order_ingredient = models.OrderIngredient(
@@ -33,7 +34,9 @@ def create_order(request, dish_id):
                 amount=request.POST[item.ingredient.title],
                 ingredient=item.ingredient,
             )
-            order_ingredient.save()
+            order_ingredient_list.append(order_ingredient)
+
+        models.OrderIngredient.objects.bulk_create(order_ingredient_list)
 
         return redirect("dishes:orders")
     return render(request, "dishes/dish_details.html", {"dish": dish})
