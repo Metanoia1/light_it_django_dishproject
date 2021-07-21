@@ -21,6 +21,9 @@ class OrderList(ListView):
     template_name = "dishes/orders.html"
     context_object_name = "orders"
 
+    def get_queryset(self):
+        return models.Order.objects.prefetch_related("oi__ingredient")
+
 
 def create_order(request, dish_id):
     dish = get_object_or_404(models.Dish, pk=dish_id)
