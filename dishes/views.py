@@ -15,6 +15,9 @@ class DishDetail(DetailView):
     template_name = "dishes/details.html"
     context_object_name = "dish"
 
+    def get_queryset(self):
+        return models.Dish.objects.prefetch_related("di__ingredient")
+
 
 class OrderList(ListView):
     model = models.Order
