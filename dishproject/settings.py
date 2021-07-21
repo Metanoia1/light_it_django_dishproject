@@ -135,7 +135,7 @@ import psycopg2
 import dj_database_url
 
 DEBUG = False
-ALLOWED_HOSTS = ["127.0.0.1", "localhost", "dishp.herokuapp.com"]
+ALLOWED_HOSTS = ["dishp.herokuapp.com"]
 MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
