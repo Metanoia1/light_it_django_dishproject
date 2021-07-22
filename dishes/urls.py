@@ -9,5 +9,6 @@ urlpatterns = [
     path("", views.DishList.as_view(), name="index"),
     path("<int:pk>", views.DishDetail.as_view(), name="details"),
     path("orders/", views.OrderList.as_view(), name="orders"),
+    path("creation/<int:pk>", views.OrderCreation.as_view(), name="creation"),
     path("order/<int:dish_id>", views.create_order, name="order"),
 ]

@@ -1,25 +1,22 @@
 {% extends 'dishes/layout.html' %}
 
-{% block title %}ORDER INGREDIENTS{% endblock %}
+{% block title %}DISH INGREDIENTS{% endblock %}
 
 {% block content %}
 
-  <form action="{% url 'dishes:order' dish.id %}" method="POST">
-    {% csrf_token %}
-    {% for ingredient in dish.di.all %}
-      <p>{{ ingredient.ingredient.title }}:</p>
-      <input class="form-control"
-        type="number"
-        min="0"
-        max="10000"
-        name="{{ ingredient.ingredient.title }}"
-        value="{{ ingredient.amount }}"
-        required>
-    {% endfor %}
-    <br>
-    <div class="col-12">
-      <button class="btn btn-primary" type="submit">ORDER</button>
-    </div>
-  </form>
+  <h3>{{dish.title}}</h3>
+  <hr>
+
+  {% for item in dish.di.all %}
+    <p>
+      <strong>ingredient:</strong> {{item.ingredient.title}},
+      <strong>amount:</strong> {{item.amount}}
+    </p>
+  {% endfor %}
+  <hr>
+
+  <a
+    href="{% url 'dishes:creation' dish.id %}"
+    class="btn btn-primary">CREATE ORDER</button></a>
 
 {% endblock %}
