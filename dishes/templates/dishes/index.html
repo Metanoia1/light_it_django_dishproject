@@ -4,7 +4,7 @@
 
 {% block content %}
   {% for dish in dishes %}
-    <p>{{ dish.title }}</p>
+    <h1>{{ dish.title }}</h1>
     <a href="{% url 'dishes:details' dish.id %}">details</a>
     <hr>
   {% endfor %}
