@@ -4,6 +4,9 @@
 
 {% block content %}
 
+  <h3>{{dish.title}}</h3>
+  <hr>
+
   <form action="{% url 'dishes:order' dish.id %}" method="POST">
     {% csrf_token %}
     {% for ingredient in dish.di.all %}
