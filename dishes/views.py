@@ -41,4 +41,4 @@ def create_order(request, dish_id):
             for item in dish.di.all()
         )
         return redirect("dishes:orders")
-    return render(request, "dishes/dish_details.html", {"dish": dish})
+    return render(request, "dishes/details.html", {"dish": dish})

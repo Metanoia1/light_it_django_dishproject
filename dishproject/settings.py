@@ -123,25 +123,25 @@ STATIC_URL = "/static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-# try:
-#     from .settings_local import *
-# except ImportError as e:
-#     print(e)
+try:
+    from .settings_local import *
+except ImportError as e:
+    print(e)
 
 # FOR DEPLOYING ON HEROKU
 ###############################################################################
-import os
-import psycopg2
-import dj_database_url
-
-DEBUG = False
-ALLOWED_HOSTS = ["dishp.herokuapp.com"]
-MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-DATABASE_URL = os.environ["DATABASE_URL"]
-conn = psycopg2.connect(DATABASE_URL, sslmode="require")
-DATABASES = {
-    "default": dj_database_url.config(conn_max_age=600, ssl_require=True),
-}
-SECRET_KEY = os.environ["SK"]
+# import os
+# import psycopg2
+# import dj_database_url
+#
+# DEBUG = False
+# ALLOWED_HOSTS = ["dishp.herokuapp.com"]
+# MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
+# STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+# STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+# DATABASE_URL = os.environ["DATABASE_URL"]
+# conn = psycopg2.connect(DATABASE_URL, sslmode="require")
+# DATABASES = {
+#     "default": dj_database_url.config(conn_max_age=600, ssl_require=True),
+# }
+# SECRET_KEY = os.environ["SK"]
