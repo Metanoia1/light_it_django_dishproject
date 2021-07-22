@@ -10,6 +10,7 @@ class Ingredient(models.Model):
 
 class Dish(models.Model):
     title = models.CharField(max_length=50, unique=True)
+    description = models.TextField(max_length=200, null=True, blank=True)
     ingredients = models.ManyToManyField(
         Ingredient,
         through="DishIngredient",

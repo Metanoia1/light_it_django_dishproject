@@ -7,6 +7,11 @@
   <h3>{{dish.title}}</h3>
   <hr>
 
+  {% if dish.description %}
+    <h3>{{dish.title}}</h3>
+    <hr>
+  {% endif %}
+
   {% for item in dish.di.all %}
     <p>
       <strong>ingredient:</strong> {{item.ingredient.title}},
