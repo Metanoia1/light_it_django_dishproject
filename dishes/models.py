@@ -24,6 +24,9 @@ class Dish(models.Model):
 
 
 class Order(models.Model):
+    dish = models.ForeignKey(
+        Dish, on_delete=models.CASCADE, related_name="orders"
+    )
     ingredients = models.ManyToManyField(
         Ingredient,
         through="OrderIngredient",

@@ -5,7 +5,8 @@
 {% block content %}
 
   {% for order in orders %}
-    <p><strong>ORDER_ID:</strong> {{order.id}}</p>
+    <p><strong>ORDER_ID: </strong>{{order.id}}</p>
+    <p><strong>DISH: </strong>{{order.dish.title}}</p>
     {% for item in order.oi.all %}
     <p>
       <strong>ingredient:</strong> {{item.ingredient.title}},

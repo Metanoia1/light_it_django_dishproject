@@ -31,7 +31,8 @@ class OrderList(ListView):
 def create_order(request, dish_id):
     dish = get_object_or_404(models.Dish, pk=dish_id)
     if request.method == "POST":
-        order = models.Order.objects.create()
+        order = models.Order.objects.create(dish_id=dish.id)
+
         models.OrderIngredient.objects.bulk_create(
             models.OrderIngredient(
                 order=order,
@@ -40,5 +41,6 @@ def create_order(request, dish_id):
             )
             for item in dish.di.all()
         )
+
         return redirect("dishes:orders")
     return render(request, "dishes/details.html", {"dish": dish})
