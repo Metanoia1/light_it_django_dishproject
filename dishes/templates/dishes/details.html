@@ -5,7 +5,8 @@
 {% block content %}
 
   <h3>{{dish.title}}</h3>
-  <hr>
+  <div class="mb-1 text-muted">{{dish.created_at}}</div>
+  <hr> 
 
   {% if dish.description %}
     <p>{{dish.description}}</p>

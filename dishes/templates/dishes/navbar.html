@@ -3,7 +3,6 @@
   aria-label="Fourth navbar example">
 
   <div class="container-fluid">
-
     <a class="navbar-brand" href="{% url 'dishes:index' %}">Dishes</a>
 
     <button
@@ -17,12 +16,23 @@
       <span class="navbar-toggler-icon"></span>
     </button>
 
+    <form action="{% url 'dishes:index' %}"class="d-flex" method="get">
+      <input
+        type="text"
+        name="title"
+        class="form-control me-2"
+        placeholder="dish title exact"
+        aria-label="Search">
+      <button class="btn btn-outline-success" type="submit">Search</button>
+    </form>
+
     <div class="collapse navbar-collapse" id="navbarsExample04">
       <ul class="navbar-nav me-auto mb-2 mb-md-0">
         <li class="nav-item">
             <a class="nav-link" href="{% url 'dishes:orders' %}">Orders</a>
         </li>
       </ul>
+      <a class="btn btn-outline-info" href="{% url 'dishes:filters' %}">filters</a>
     </div>
 
   </div>

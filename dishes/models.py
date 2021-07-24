@@ -11,6 +11,7 @@ class Ingredient(models.Model):
 class Dish(models.Model):
     title = models.CharField(max_length=50, unique=True)
     description = models.TextField(max_length=200, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
     ingredients = models.ManyToManyField(
         Ingredient,
         through="DishIngredient",
@@ -18,7 +19,7 @@ class Dish(models.Model):
     )
 
     class Meta:
-        ordering = ["-id"]
+        ordering = ["-created_at"]
 
     def __str__(self):
         return self.title

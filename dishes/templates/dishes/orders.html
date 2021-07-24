@@ -4,6 +4,10 @@
 
 {% block content %}
 
+  {% if not orders %}
+    <h1>There are no orders...</h1>
+  {% endif %}
+
   {% for order in orders %}
     <p><strong>ORDER_ID: </strong>{{order.id}}</p>
     <p><strong>Dish: </strong>{{order.dish.title}}</p>

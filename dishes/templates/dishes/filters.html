@@ -1,0 +1,60 @@
+{% extends 'dishes/layout.html' %}
+
+{% block title %}FILTERS{% endblock %}
+
+{% block content %}
+
+  <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" method="get">
+    <input
+      type="text"
+      name="title"
+      value="{{request.GET.title}}"
+      class="form-control form-control-dark"
+      placeholder="dish title contains">
+    <br>
+    <div class="row">
+      <div class="col">
+          <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="floatingInput"
+              name="gt"
+              value="{{request.GET.gt}}"
+              maxlength="10"
+              placeholder="yyyy-mm-dd">
+            <label for="floatingInput">min: yyyy-mm-dd</label>
+          </div>
+      </div>
+      <div class="col">
+          <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="floatingInput"
+              name="lt"
+              value="{{request.GET.lt}}"
+              maxlength="10"
+              placeholder="yyyy-mm-dd">
+              <label for="floatingInput">max: yyyy-mm-dd</label>
+          </div>
+      </div>
+    </div>
+
+    {% for message in messages %}
+      <p class="text-danger"><strong>{{message}}</strong></p>
+    {% endfor %}
+
+    <input type="checkbox" name="reverse">
+    <p>reverse</p>
+    <button class="btn btn-outline-primary" type="submit">Search</button>
+    <a class="text-danger" href="{% url 'dishes:index' %}">close</a>
+  </form>
+  <hr>
+
+  {% if not dishes %}
+    <h1>There are no dishes...</h1>
+  {% endif %}
+
+  {% for dish in dishes %}
+    <h1>{{ dish.title }}</h1>
+    <div class="mb-1 text-muted">{{ dish.created_at }}</div>
+    <a href="{% url 'dishes:details' dish.id %}">details</a>
+    <hr>
+  {% endfor %}
+
+{% endblock %}
