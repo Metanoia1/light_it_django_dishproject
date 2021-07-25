@@ -61,16 +61,13 @@ class DishFilter(ListView):
         if "lt" in content:
             dishes = utils.filter_lt(content, self.request, dishes)
 
-        if "reverse" in content:
-            return dishes[::-1]
-        return dishes
+        return dishes[::-1] if "reverse" in content else dishes
 
 
 def create_order(request, dish_id):
     dish = get_object_or_404(models.Dish, pk=dish_id)
     if request.method == "POST":
         order = models.Order.objects.create(dish_id=dish.id)
-
         models.OrderIngredient.objects.bulk_create(
             models.OrderIngredient(
                 order=order,
@@ -79,6 +76,5 @@ def create_order(request, dish_id):
             )
             for item in dish.di.all()
         )
-
         return redirect("dishes:orders")
     return render(request, "dishes/details.html", {"dish": dish})

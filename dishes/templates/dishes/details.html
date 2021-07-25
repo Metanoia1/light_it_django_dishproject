@@ -5,18 +5,18 @@
 {% block content %}
 
   <h3>{{dish.title}}</h3>
-  <div class="mb-1 text-muted">{{dish.created_at}}</div>
+  <div class="mb-1 text-muted">{{ dish.created_at }}</div>
   <hr> 
 
   {% if dish.description %}
-    <p>{{dish.description}}</p>
+    <p>{{ dish.description }}</p>
     <hr>
   {% endif %}
 
   {% for item in dish.di.all %}
     <p>
-      <strong>ingredient:</strong> {{item.ingredient.title}},
-      <strong>amount:</strong> {{item.amount}}
+      <strong>ingredient:</strong> {{ item.ingredient.title }},
+      <strong>amount:</strong> {{ item.amount }}
     </p>
   {% endfor %}
   <hr>
