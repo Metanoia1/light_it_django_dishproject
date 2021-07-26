@@ -40,7 +40,7 @@ class Order(models.Model):
 
 
 class IngredientAmount(models.Model):
-    amount = models.PositiveIntegerField(default=1)
+    amount = models.PositiveSmallIntegerField(default=1)
 
     class Meta:
         abstract = True
@@ -55,8 +55,14 @@ class DishIngredient(IngredientAmount):
 
 class OrderIngredient(IngredientAmount):
     order = models.ForeignKey(
-        Order, on_delete=models.CASCADE, related_name="oi"
+        Order,
+        on_delete=models.CASCADE,
+        related_name="oi",
+        null=True,
+        blank=True,
     )
     ingredient = models.ForeignKey(
-        Ingredient, on_delete=models.CASCADE, related_name="oi"
+        Ingredient,
+        on_delete=models.CASCADE,
+        related_name="oi",
     )

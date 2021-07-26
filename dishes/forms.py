@@ -3,15 +3,29 @@ from django import forms
 from . import models
 
 
-class OrderIngredientForm(forms.Form):
-    ingredient = forms.CharField(
+class OrderIngredientModelForm(forms.ModelForm):
+    ingredient = forms.ModelChoiceField(
         label="",
-        disabled=True,
-        widget=forms.TextInput(attrs={"class": "form-control"}),
+        queryset=models.Ingredient.objects.all(),
+        to_field_name="title",
+        widget=forms.TextInput(
+            attrs={"class": "form-control", "readonly": "readonly"}
+        ),
     )
     amount = forms.IntegerField(
         label="",
-        min_value=0,
-        max_value=10000,
-        widget=forms.NumberInput(attrs={"class": "form-control"}),
+        widget=forms.NumberInput(
+            attrs={"class": "form-control", "max_num": 10000}
+        ),
     )
+
+    class Meta:
+        model = models.OrderIngredient
+        fields = ("ingredient", "amount")
+
+
+# birth_date = forms.DateField(
+#     widget=DateTimePicker(
+#         options={"format": "YYYY-MM-DD", "pickSeconds": False}
+#     )
+# )
