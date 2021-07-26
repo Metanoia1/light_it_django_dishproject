@@ -7,19 +7,9 @@
   <h3>{{dish.title}}</h3>
   <hr>
 
-  <form action="{% url 'dishes:order' dish.id %}" method="POST">
+  <form method="POST">
     {% csrf_token %}
-    {% for ingredient in dish.di.all %}
-      <p>{{ ingredient.ingredient.title }}:</p>
-      <input class="form-control"
-        type="number"
-        min="0"
-        max="10000"
-        name="{{ ingredient.ingredient.title }}"
-        value="{{ ingredient.amount }}"
-        required>
-    {% endfor %}
-    <br>
+    {{ formset.as_p }}
     <div class="col-12">
       <button class="btn btn-primary" type="submit">ORDER</button>
     </div>

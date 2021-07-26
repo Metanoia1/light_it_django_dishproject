@@ -1,6 +1,6 @@
 {% extends 'dishes/layout.html' %}
 
-{% block title %}DISH INGREDIENTS{% endblock %}
+{% block title %}DISH DESCRIPTION{% endblock %}
 
 {% block content %}
 
@@ -22,7 +22,7 @@
   <hr>
 
   <a
-    href="{% url 'dishes:creation' dish.id %}"
+    href="{% url 'dishes:order' dish.id %}"
     class="btn btn-primary">CREATE ORDER</button></a>
 
 {% endblock %}

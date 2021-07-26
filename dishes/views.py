@@ -1,6 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DetailView
+from django.forms import formset_factory
 
+from .forms import OrderIngredientForm
 from . import models
 from . import utils
 
@@ -20,15 +22,6 @@ class DishList(ListView):
 class DishDetail(DetailView):
     model = models.Dish
     template_name = "dishes/details.html"
-    context_object_name = "dish"
-
-    def get_queryset(self):
-        return models.Dish.objects.prefetch_related("di__ingredient")
-
-
-class OrderCreation(DetailView):
-    model = models.Dish
-    template_name = "dishes/create_order.html"
     context_object_name = "dish"
 
     def get_queryset(self):
@@ -66,15 +59,28 @@ class DishFilter(ListView):
 
 def create_order(request, dish_id):
     dish = get_object_or_404(models.Dish, pk=dish_id)
+    ingredients = dish.di.all()
+    FSet = formset_factory(OrderIngredientForm, max_num=ingredients.count())
+    initial = [
+        {"ingredient": item.ingredient.title, "amount": item.amount}
+        for item in ingredients
+    ]
+
     if request.method == "POST":
-        order = models.Order.objects.create(dish_id=dish.id)
-        models.OrderIngredient.objects.bulk_create(
-            models.OrderIngredient(
-                order=order,
-                amount=request.POST[item.ingredient.title],
-                ingredient=item.ingredient,
+        formset = FSet(request.POST, initial=initial)
+        if formset.is_valid():
+            order = models.Order.objects.create(dish_id=dish.id)
+            models.OrderIngredient.objects.bulk_create(
+                models.OrderIngredient(
+                    order=order,
+                    ingredient=models.Ingredient.objects.get(
+                        title=item["ingredient"]
+                    ),
+                    amount=item["amount"],
+                )
+                for item in formset.cleaned_data
             )
-            for item in dish.di.all()
-        )
-        return redirect("dishes:orders")
-    return render(request, "dishes/details.html", {"dish": dish})
+            return redirect("dishes:orders")
+
+    context = {"dish": dish, "formset": FSet(initial=initial)}
+    return render(request, "dishes/create_order.html", context)
