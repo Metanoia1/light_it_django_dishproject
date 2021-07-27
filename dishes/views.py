@@ -74,14 +74,10 @@ def create_order(request, dish_id):
         formset = OrderIngredientFormSet(request.POST)
         if formset.is_valid():
             order = models.Order.objects.create(dish_id=dish.id)
-            models.OrderIngredient.objects.bulk_create(
-                models.OrderIngredient(
-                    order=order,
-                    ingredient=item["ingredient"],
-                    amount=item["amount"],
-                )
-                for item in formset.cleaned_data
-            )
+            instances = formset.save(commit=False)
+            for obj in instances:
+                obj.order = order
+            formset.save()
             return redirect("dishes:orders")
 
     initial = [
