@@ -58,8 +58,6 @@ class OrderIngredient(IngredientAmount):
         Order,
         on_delete=models.CASCADE,
         related_name="oi",
-        null=True,
-        blank=True,
     )
     ingredient = models.ForeignKey(
         Ingredient,
