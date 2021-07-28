@@ -15,22 +15,20 @@
     <div class="row">
       <div class="col">
           <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="floatingInput"
+            <input type="date" class="form-control" id="floatingInput"
               name="gt"
               value="{{ request.GET.gt }}"
-              maxlength="10"
-              placeholder="yyyy-mm-dd">
-            <label for="floatingInput">min: yyyy-mm-dd</label>
+              maxlength="10">
+            <label for="floatingInput">min date value</label>
           </div>
       </div>
       <div class="col">
           <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="floatingInput"
+            <input type="date" class="form-control" id="floatingInput"
               name="lt"
               value="{{ request.GET.lt }}"
-              maxlength="10"
-              placeholder="yyyy-mm-dd">
-              <label for="floatingInput">max: yyyy-mm-dd</label>
+              maxlength="10">
+              <label for="floatingInput">max date value</label>
           </div>
       </div>
     </div>

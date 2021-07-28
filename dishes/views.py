@@ -1,10 +1,13 @@
-from django.shortcuts import render, get_object_or_404, redirect
-from django.views.generic import ListView, DetailView
-from django.forms import modelformset_factory
+import logging
 
-from . import forms
+from django.shortcuts import render, get_object_or_404, redirect
+from django.views.generic import ListView, DetailView, CreateView
+
 from . import models
 from . import utils
+
+
+logger = logging.getLogger(__name__)
 
 
 class DishList(ListView):
@@ -25,6 +28,8 @@ class DishDetail(DetailView):
     context_object_name = "dish"
 
     def get_queryset(self):
+        print(dir(self))
+        print(self.kwargs["pk"])
         return models.Dish.objects.prefetch_related("di__ingredient")
 
 
@@ -57,38 +62,28 @@ class DishFilter(ListView):
         return dishes[::-1] if "reverse" in content else dishes
 
 
-# TODO: ЭТА ВЬЮШКА ТРЕБУЕТ СРОЧНОГО РЕФАКТОРИНГА
 def create_order(request, dish_id):
     dish = get_object_or_404(models.Dish, pk=dish_id)
-    ingredients = dish.di.all()
-    ingredients_amount = ingredients.count()
-
-    OrderIngredientFormSet = modelformset_factory(
-        models.OrderIngredient,
-        form=forms.OrderIngredientModelForm,
-        extra=ingredients_amount,
-        max_num=ingredients_amount,
-    )
+    ingredients = dish.di.select_related("ingredient")
+    amount = ingredients.count()
+    OrderIngredientFormSet = utils.get_oi_formset(extra=amount, max_num=amount)
 
     if request.method == "POST":
         formset = OrderIngredientFormSet(request.POST)
         if formset.is_valid():
             order = models.Order.objects.create(dish_id=dish.id)
             instances = formset.save(commit=False)
-            for obj in instances:
-                obj.order = order
+            utils.merge_instances_with_order(instances, order)
             formset.save()
             return redirect("dishes:orders")
+        logging.warning("oi formset is not valid")
 
-    initial = [
-        {"ingredient": item.ingredient, "amount": item.amount}
-        for item in ingredients
-    ]
+    context = {
+        "dish": dish,
+        "formset": OrderIngredientFormSet(
+            queryset=models.OrderIngredient.objects.none(),
+            initial=utils.get_oi_initial(ingredients),
+        ),
+    }
 
-    formset = OrderIngredientFormSet(
-        queryset=models.OrderIngredient.objects.none(),
-        initial=initial,
-    )
-
-    context = {"dish": dish, "formset": formset}
     return render(request, "dishes/create_order.html", context)
