@@ -28,8 +28,6 @@ class DishDetail(DetailView):
     context_object_name = "dish"
 
     def get_queryset(self):
-        print(dir(self))
-        print(self.kwargs["pk"])
         return models.Dish.objects.prefetch_related("di__ingredient")
 
 
@@ -63,6 +61,7 @@ class DishFilter(ListView):
 
 
 def create_order(request, dish_id):
+    logger.debug("create_order called...")
     dish = get_object_or_404(models.Dish, pk=dish_id)
     ingredients = dish.di.select_related("ingredient")
     amount = ingredients.count()
@@ -76,7 +75,7 @@ def create_order(request, dish_id):
             utils.merge_instances_with_order(instances, order)
             formset.save()
             return redirect("dishes:orders")
-        logging.warning("oi formset is not valid")
+        logger.warning("formset is not valid")
 
     context = {
         "dish": dish,

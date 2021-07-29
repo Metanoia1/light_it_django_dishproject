@@ -15,7 +15,7 @@ class OrderIngredientModelForm(forms.ModelForm):
     amount = forms.IntegerField(
         label="",
         widget=forms.NumberInput(
-            attrs={"class": "form-control", "max_num": 10000}
+            attrs={"class": "form-control", "max": 10000, "min": 0}
         ),
     )
 

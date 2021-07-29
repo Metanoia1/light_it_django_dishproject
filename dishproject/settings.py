@@ -101,17 +101,28 @@ AUTH_PASSWORD_VALIDATORS = [
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
+    "formatters": {
+        "dish_formatter": {
+            "format": "{levelname} {asctime} {module} {process:d} {thread:d} {message}",
+            "style": "{",
+        },
+    },
     "handlers": {
         "file": {
-            "level": "DEBUG",
+            "level": "WARNING",
             "class": "logging.FileHandler",
             "filename": BASE_DIR / "log.log",
+            "formatter": "dish_formatter",
+        },
+        "console": {
+            "level": "DEBUG",
+            "class": "logging.StreamHandler",
         },
     },
     "loggers": {
-        "mailings": {
-            "handlers": ["file"],
-            "level": "WARNING",
+        "dishes": {
+            "handlers": ["file", "console"],
+            "level": "DEBUG",
             "propagate": True,
         },
     },
