@@ -171,7 +171,7 @@ CELERY_RESULT_BACKEND = "django-db"
 CELERY_BEAT_SCHEDULE = {
     "every_day_at_19pm": {
         "task": "dishes.tasks.report",
-        "schedule": crontab(hour=23, minute=5),
+        "schedule": crontab(hour=19, minute=0),
     }
 }
 
