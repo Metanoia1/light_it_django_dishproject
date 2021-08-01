@@ -11,4 +11,5 @@ urlpatterns = [
     path("<int:pk>", views.DishDetail.as_view(), name="details"),
     path("orders/", views.OrderList.as_view(), name="orders"),
     path("order/<int:dish_id>", views.create_order, name="order"),
+    path("report/", views.get_csv_report, name="report"),
 ]

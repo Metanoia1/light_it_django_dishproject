@@ -1,7 +1,10 @@
 import logging
+import csv
+import codecs
 
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DetailView, CreateView
+from django.http import HttpResponse
 
 from . import models
 from . import utils
@@ -75,7 +78,8 @@ def create_order(request, dish_id):
             utils.merge_instances_with_order(instances, order)
             formset.save()
             return redirect("dishes:orders")
-        logger.warning("formset is not valid")
+        logger.warning(f"formset is not valid with data: {request.POST}")
+        return redirect("dishes:order", dish_id)
 
     context = {
         "dish": dish,
@@ -86,3 +90,12 @@ def create_order(request, dish_id):
     }
 
     return render(request, "dishes/create_order.html", context)
+
+
+def get_csv_report(request):
+    response = HttpResponse(content_type="text/csv")
+    response["Content-Disposition"] = 'attachment; filename="report.csv"'
+    response.write(codecs.BOM_UTF8)
+    writer = csv.writer(response, delimiter=",")
+    utils.create_csv_report(writer)
+    return response

@@ -3,7 +3,7 @@ from django.forms import modelformset_factory
 from django.contrib import messages
 
 from .forms import OrderIngredientModelForm
-from .models import OrderIngredient
+from .models import OrderIngredient, Order
 
 
 def filter_gt(content, request, dishes):
@@ -51,3 +51,41 @@ def get_oi_initial(ingredients):
 def merge_instances_with_order(instances, order):
     for obj in instances:
         obj.order = order
+
+
+def create_csv_report(writer):
+    writer.writerow(
+        ["ORDER", "DISH_TITLE", "INGREDIENTS", "CHANGED", "WHAT_IS_CHANGED"]
+    )
+    for order in Order.objects.all():
+        dish = order.dish
+        di = dish.di.all()
+        dish_ingredients = " ".join(
+            f"{obj.ingredient.title}-{obj.amount}" for obj in di
+        ).split()
+
+        order_ingredients = " ".join(
+            f"{obj.ingredient.title}-{obj.amount}" for obj in order.oi.all()
+        ).split()
+
+        is_changed = False
+        changed_ingredients = []
+        for string in order_ingredients:
+            if string not in dish_ingredients:
+                is_changed = True
+                changed_ingredients.append(string)
+
+        if is_changed:
+            is_changed = "TRUE"
+        else:
+            is_changed = "FALSE"
+
+        row = [
+            order.id,
+            order.dish.title,
+            " ".join(f"{obj.ingredient.title}-{obj.amount}" for obj in di),
+            is_changed,
+            " ".join(changed_ingredients),
+        ]
+
+        writer.writerow(row)

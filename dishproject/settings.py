@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -19,6 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = os.environ["SK"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -29,13 +31,15 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    "dishes.apps.DishesConfig",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django_celery_results",
+    "django_celery_beat",
+    "dishes.apps.DishesConfig",
 ]
 
 MIDDLEWARE = [
@@ -98,35 +102,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-LOGGING = {
-    "version": 1,
-    "disable_existing_loggers": False,
-    "formatters": {
-        "dish_formatter": {
-            "format": "{levelname} {asctime} {module} {process:d} {thread:d} {message}",
-            "style": "{",
-        },
-    },
-    "handlers": {
-        "file": {
-            "level": "WARNING",
-            "class": "logging.FileHandler",
-            "filename": BASE_DIR / "log.log",
-            "formatter": "dish_formatter",
-        },
-        "console": {
-            "level": "DEBUG",
-            "class": "logging.StreamHandler",
-        },
-    },
-    "loggers": {
-        "dishes": {
-            "handlers": ["file", "console"],
-            "level": "DEBUG",
-            "propagate": True,
-        },
-    },
-}
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
@@ -152,6 +127,54 @@ STATIC_URL = "/static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+# LOGGING
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "dish_formatter": {
+            "format": "{levelname} {asctime} {module} {process:d} {thread:d} {message}",
+            "style": "{",
+        },
+    },
+    "handlers": {
+        "file": {
+            "level": "WARNING",
+            "class": "logging.handlers.TimedRotatingFileHandler",
+            "filename": BASE_DIR / "log.log",
+            "backupCount": 10,
+            "when": "D",
+            "interval": 1,
+            "formatter": "dish_formatter",
+        },
+        "console": {
+            "level": "DEBUG",
+            "class": "logging.StreamHandler",
+        },
+    },
+    "loggers": {
+        "dishes": {
+            "handlers": ["file", "console"],
+            "level": "DEBUG",
+            "propagate": True,
+        },
+    },
+}
+
+# CELERY
+from celery.schedules import crontab
+
+CELERY_ENABLE_UTC = False
+CELERY_TIMEZONE = "Europe/Kiev"
+CELERY_BROKER_URL = "redis://localhost"
+CELERY_RESULT_BACKEND = "django-db"
+CELERY_BEAT_SCHEDULE = {
+    "every_day_at_19pm": {
+        "task": "dishes.tasks.report",
+        "schedule": crontab(hour=23, minute=5),
+    }
+}
+
 
 # try:
 #     from .settings_local import *
@@ -161,7 +184,6 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # FOR DEPLOYING ON HEROKU
 ###############################################################################
-import os
 import psycopg2
 import dj_database_url
 
@@ -175,4 +197,3 @@ conn = psycopg2.connect(DATABASE_URL, sslmode="require")
 DATABASES = {
     "default": dj_database_url.config(conn_max_age=600, ssl_require=True),
 }
-SECRET_KEY = os.environ["SK"]
