@@ -34,7 +34,7 @@ class Order(models.Model):
         through="OrderIngredient",
         related_name="orders",
     )
-    created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         ordering = ["-id"]
