@@ -101,7 +101,7 @@ def create_order(request, dish_id):
 
 def get_csv_report(request):
     response = HttpResponse(content_type="text/csv")
-    response["Content-Disposition"] = "attachment; filename='report.csv'"
+    response["Content-Disposition"] = 'attachment; filename="report.csv"'
     response.write(codecs.BOM_UTF8)
     writer = csv.writer(response, delimiter=",")
     gt_date = now() - timedelta(days=1)
