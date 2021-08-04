@@ -1,9 +1,6 @@
-from datetime import timedelta
-
 from django.core.exceptions import ValidationError
 from django.forms import modelformset_factory
 from django.contrib import messages
-from django.utils.timezone import now
 
 from .forms import OrderIngredientModelForm
 from .models import OrderIngredient, Order
@@ -56,12 +53,18 @@ def merge_instances_with_order(instances, order):
         obj.order = order
 
 
-def create_csv_report(writer):
+def create_csv_report(writer, gt_date):
     writer.writerow(
-        ["ORDER", "DISH_TITLE", "INGREDIENTS", "CHANGED", "WHAT_IS_CHANGED"]
+        [
+            "ORDER",
+            "CREATED_AT",
+            "DISH_TITLE",
+            "INGREDIENTS",
+            "CHANGED",
+            "WHAT_IS_CHANGED",
+        ]
     )
-    period = now() - timedelta(days=1)
-    for order in Order.objects.filter(created_at__gt=period):
+    for order in Order.objects.filter(created_at__gt=gt_date):
         dish = order.dish
         di = dish.di.all()
         dish_ingredients = " ".join(
@@ -86,6 +89,7 @@ def create_csv_report(writer):
 
         row = [
             order.id,
+            order.created_at,
             order.dish.title,
             " ".join(f"{obj.ingredient.title}-{obj.amount}" for obj in di),
             is_changed,

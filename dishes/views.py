@@ -1,91 +1,98 @@
 import logging
 import csv
 import codecs
+from datetime import timedelta
 
 from django.shortcuts import render, get_object_or_404, redirect
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import ListView, DetailView
+from django.utils.timezone import now
 from django.http import HttpResponse
 
-from . import models
-from . import utils
+from .models import Dish, Order, OrderIngredient
+from .utils import (
+    merge_instances_with_order,
+    create_csv_report,
+    get_oi_formset,
+    get_oi_initial,
+    filter_gt,
+    filter_lt,
+)
 
 
 logger = logging.getLogger(__name__)
 
 
 class DishList(ListView):
-    model = models.Dish
+    model = Dish
     template_name = "dishes/index.html"
     context_object_name = "dishes"
 
     def get_queryset(self):
         content = self.request.GET
         if "title" in content:
-            return models.Dish.objects.filter(title=content.get("title", None))
-        return models.Dish.objects.all()
+            return Dish.objects.filter(title=content.get("title", None))
+        return Dish.objects.all()
 
 
 class DishDetail(DetailView):
-    model = models.Dish
+    model = Dish
     template_name = "dishes/details.html"
     context_object_name = "dish"
 
     def get_queryset(self):
-        return models.Dish.objects.prefetch_related("di__ingredient")
+        return Dish.objects.prefetch_related("di__ingredient")
 
 
 class OrderList(ListView):
-    model = models.Order
+    model = Order
     template_name = "dishes/orders.html"
     context_object_name = "orders"
 
     def get_queryset(self):
-        return models.Order.objects.prefetch_related("oi__ingredient")
+        return Order.objects.prefetch_related("oi__ingredient")
 
 
 class DishFilter(ListView):
-    model = models.Dish
+    model = Dish
     template_name = "dishes/filters.html"
     context_object_name = "dishes"
 
     def get_queryset(self):
         content = self.request.GET
-        dishes = models.Dish.objects.filter(
-            title__icontains=content.get("title", "")
-        )
+        dishes = Dish.objects.filter(title__icontains=content.get("title", ""))
 
         if "gt" in content:
-            dishes = utils.filter_gt(content, self.request, dishes)
+            dishes = filter_gt(content, self.request, dishes)
 
         if "lt" in content:
-            dishes = utils.filter_lt(content, self.request, dishes)
+            dishes = filter_lt(content, self.request, dishes)
 
         return dishes[::-1] if "reverse" in content else dishes
 
 
 def create_order(request, dish_id):
     logger.debug("create_order called...")
-    dish = get_object_or_404(models.Dish, pk=dish_id)
+    dish = get_object_or_404(Dish, pk=dish_id)
     ingredients = dish.di.select_related("ingredient")
     amount = ingredients.count()
-    OrderIngredientFormSet = utils.get_oi_formset(extra=amount, max_num=amount)
+    OrderIngredientFormSet = get_oi_formset(extra=amount, max_num=amount)
 
     if request.method == "POST":
         formset = OrderIngredientFormSet(request.POST)
         if formset.is_valid():
-            order = models.Order.objects.create(dish_id=dish.id)
+            order = Order.objects.create(dish_id=dish.id)
             instances = formset.save(commit=False)
-            utils.merge_instances_with_order(instances, order)
+            merge_instances_with_order(instances, order)
             formset.save()
             return redirect("dishes:orders")
-        logger.warning(f"formset is not valid with data: {request.POST}")
+        logger.warning("formset is not valid with data: %s", request.POST)
         return redirect("dishes:order", dish_id)
 
     context = {
         "dish": dish,
         "formset": OrderIngredientFormSet(
-            queryset=models.OrderIngredient.objects.none(),
-            initial=utils.get_oi_initial(ingredients),
+            queryset=OrderIngredient.objects.none(),
+            initial=get_oi_initial(ingredients),
         ),
     }
 
@@ -94,8 +101,9 @@ def create_order(request, dish_id):
 
 def get_csv_report(request):
     response = HttpResponse(content_type="text/csv")
-    response["Content-Disposition"] = 'attachment; filename="report.csv"'
+    response["Content-Disposition"] = "attachment; filename='report.csv'"
     response.write(codecs.BOM_UTF8)
     writer = csv.writer(response, delimiter=",")
-    utils.create_csv_report(writer)
+    gt_date = now() - timedelta(days=1)
+    create_csv_report(writer, gt_date)
     return response
