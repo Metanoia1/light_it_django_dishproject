@@ -169,9 +169,9 @@ CELERY_TIMEZONE = "Europe/Kiev"
 CELERY_BROKER_URL = "redis://localhost"
 CELERY_RESULT_BACKEND = "django-db"
 CELERY_BEAT_SCHEDULE = {
-    "every_day_at_19pm": {
+    "report_every_day_at_22pm": {
         "task": "dishes.tasks.report",
-        "schedule": crontab(hour=19, minute=0),
+        "schedule": crontab(hour=22, minute=0),
     }
 }
 

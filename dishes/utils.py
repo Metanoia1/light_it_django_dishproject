@@ -1,6 +1,9 @@
+from datetime import timedelta
+
 from django.core.exceptions import ValidationError
 from django.forms import modelformset_factory
 from django.contrib import messages
+from django.utils.timezone import now
 
 from .forms import OrderIngredientModelForm
 from .models import OrderIngredient, Order
@@ -57,7 +60,8 @@ def create_csv_report(writer):
     writer.writerow(
         ["ORDER", "DISH_TITLE", "INGREDIENTS", "CHANGED", "WHAT_IS_CHANGED"]
     )
-    for order in Order.objects.all():
+    period = now() - timedelta(days=1)
+    for order in Order.objects.filter(created_at__gt=period):
         dish = order.dish
         di = dish.di.all()
         dish_ingredients = " ".join(

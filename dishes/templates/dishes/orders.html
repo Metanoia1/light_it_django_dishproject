@@ -10,6 +10,7 @@
 
   {% for order in orders %}
     <p><strong>ORDER_ID: </strong>{{ order.id }}</p>
+    <div class="mb-1 text-muted">{{ order.created_at }}</div>
     <p><strong>Dish: </strong>{{ order.dish.title }}</p>
     {% for item in order.oi.all %}
     <p>
