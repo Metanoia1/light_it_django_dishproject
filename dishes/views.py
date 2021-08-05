@@ -3,8 +3,10 @@ import csv
 import codecs
 from datetime import timedelta
 
+from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DetailView
@@ -26,15 +28,18 @@ logger = logging.getLogger(__name__)
 
 
 def login_user(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         form = AuthenticationForm(data=request.POST)
         if form.is_valid():
             username = form.cleaned_data["username"]
             password = form.cleaned_data["password"]
             user = authenticate(request, username=username, password=password)
             login(request, user)
-            return redirect('dishes:index')
-    return render(request, 'dishes/login.html', {"form": AuthenticationForm()})
+            content = request.GET
+            if "next" in content:
+                return redirect(content["next"])
+            return redirect("dishes:index")
+    return render(request, "dishes/login.html", {"form": AuthenticationForm()})
 
 
 def register_user(request):
@@ -43,16 +48,16 @@ def register_user(request):
         form = UserCreationForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('dishes:login')
-    return render(request, 'dishes/register.html', {'form':form})
+            return redirect("dishes:login")
+    return render(request, "dishes/register.html", {"form": form})
 
 
-@login_required(login_url='dishes:login')
+@login_required(login_url="dishes:login")
 def logout_user(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         logout(request)
-        return redirect('dishes:index')
-    return render(request, 'dishes/logout_confirm.html')
+        return redirect("dishes:index")
+    return render(request, "dishes/logout_confirm.html")
 
 
 class DishList(ListView):
@@ -76,10 +81,11 @@ class DishDetail(DetailView):
         return Dish.objects.prefetch_related("di__ingredient")
 
 
-class OrderList(ListView):
+class OrderList(LoginRequiredMixin, ListView):
     model = Order
     template_name = "dishes/orders.html"
     context_object_name = "orders"
+    login_url = "/dishes/login/"
 
     def get_queryset(self):
         if self.request.user.is_authenticated:
@@ -105,6 +111,7 @@ class DishFilter(ListView):
         return dishes[::-1] if "reverse" in content else dishes
 
 
+@login_required(login_url="dishes:login")
 def create_order(request, dish_id):
     logger.debug("create_order called...")
     dish = get_object_or_404(Dish, pk=dish_id)

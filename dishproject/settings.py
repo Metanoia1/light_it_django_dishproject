@@ -186,7 +186,7 @@ except ImportError as e:
 ###############################################################################
 # import psycopg2
 # import dj_database_url
-# 
+#
 # DEBUG = False
 # ALLOWED_HOSTS = ["dishp.herokuapp.com"]
 # MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")

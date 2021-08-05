@@ -3,7 +3,7 @@
   aria-label="Fourth navbar example">
 
   <div class="container-fluid">
-    <a class="navbar-brand" href="{% url 'dishes:index' %}">{{ user }}</a>
+    <a class="navbar-brand" href="{% url 'dishes:index' %}">{{ user }}|home</a>
 
     <button
       class="navbar-toggler"
@@ -30,22 +30,21 @@
     <div class="collapse navbar-collapse" id="navbarsExample04">
       <ul class="navbar-nav me-auto mb-2 mb-md-0">
         <li class="nav-item">
-            <a class="nav-link" href="{% url 'dishes:orders' %}">Orders</a>
+          <a class="nav-link" href="{% url 'dishes:filters' %}">Filters</a>
+        </li>
+      {% if user.is_authenticated %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'dishes:orders' %}">Orders</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="{% url 'dishes:filters' %}">Filters</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'dishes:report' %}">CSV-Report</a>
+          <a class="nav-link" href="{% url 'dishes:report' %}">CSV-Report</a>
         </li>
       </ul>
-
-      {% if user.is_authenticated %}
         <a class="btn btn-outline-danger" href="{% url 'dishes:logout' %}">LogOut</a>
       {% else %}
+      </ul>
         <a class="btn btn-outline-info" href="{% url 'dishes:login' %}">LogIn</a>
       {% endif %}
-
     </div>
 
   </div>
