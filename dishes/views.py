@@ -4,6 +4,7 @@ import codecs
 from datetime import timedelta
 
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DetailView
 from django.utils.timezone import now
@@ -34,6 +35,16 @@ def login_user(request):
         else:
             messages.info(request, 'login or password is incorrect')
     return render(request, 'dishes/login.html')
+
+
+def register_user(request):
+    form = UserCreationForm()
+    if request.method == "POST":
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('dishes:index')
+    return render(request, 'dishes/register.html', {'form':form})
 
 
 class DishList(ListView):
