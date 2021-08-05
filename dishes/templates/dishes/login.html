@@ -1,0 +1,30 @@
+{% extends 'dishes/layout.html' %}
+
+{% block title %}LOGIN{% endblock %}
+
+{% block content %}
+  <h1>Login page</h1><br>
+
+  {% for message in messages %}
+    <p class="text-danger">{{ message }}</p>
+  {% endfor %}
+
+  <form method="POST">
+    {% csrf_token %}
+    <div class="row">
+      <div class="col">
+        <input class="form-control" type="text" name="username" placeholder="login">
+      </div>
+      <div class="col">
+        <input class="form-control" type="password" name="password"
+          placeholder="password"><br>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <button class="btn btn-primary" type="submit">Log in</button>
+      <a href="#">Register</a>
+    </div>
+  </form>
+
+{% endblock %}
