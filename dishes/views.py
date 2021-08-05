@@ -3,6 +3,7 @@ import csv
 import codecs
 from datetime import timedelta
 
+from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DetailView
 from django.utils.timezone import now
@@ -20,6 +21,19 @@ from .utils import (
 
 
 logger = logging.getLogger(__name__)
+
+
+def login_user(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('dishes:index')
+        else:
+            messages.info(request, 'login or password is incorrect')
+    return render(request, 'dishes/login.html')
 
 
 class DishList(ListView):
