@@ -15,4 +15,4 @@ def report():
         writer = csv.writer(csvfile, delimiter=",")
         gt_date = now() - timedelta(days=1)
         queryset = Order.objects.all()
-        create_csv_report(writer, gt_date)
+        create_csv_report(writer, gt_date, queryset)
