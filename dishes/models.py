@@ -27,7 +27,13 @@ class Dish(models.Model):
 
 
 class Order(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+        related_name="orders",
+    )
     dish = models.ForeignKey(
         Dish, on_delete=models.CASCADE, related_name="orders"
     )

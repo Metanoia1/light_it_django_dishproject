@@ -53,7 +53,7 @@ def merge_instances_with_order(instances, order):
         obj.order = order
 
 
-def create_csv_report(writer, gt_date):
+def create_csv_report(writer, gt_date, queryset):
     writer.writerow(
         [
             "ORDER",
@@ -64,7 +64,7 @@ def create_csv_report(writer, gt_date):
             "WHAT_IS_CHANGED",
         ]
     )
-    for order in Order.objects.filter(created_at__gt=gt_date):
+    for order in queryset.filter(created_at__gt=gt_date):
         dish = order.dish
         di = dish.di.all()
         dish_ingredients = " ".join(

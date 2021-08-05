@@ -73,7 +73,7 @@ class OrderList(ListView):
     context_object_name = "orders"
 
     def get_queryset(self):
-        return Order.objects.prefetch_related("oi__ingredient")
+        return self.request.user.orders.prefetch_related("oi__ingredient")
 
 
 class DishFilter(ListView):
@@ -104,7 +104,7 @@ def create_order(request, dish_id):
     if request.method == "POST":
         formset = OrderIngredientFormSet(request.POST)
         if formset.is_valid():
-            order = Order.objects.create(dish_id=dish.id)
+            order = Order.objects.create(dish_id=dish.id, user=request.user)
             instances = formset.save(commit=False)
             merge_instances_with_order(instances, order)
             formset.save()
@@ -129,5 +129,6 @@ def get_csv_report(request):
     response.write(codecs.BOM_UTF8)
     writer = csv.writer(response, delimiter=",")
     gt_date = now() - timedelta(days=1)
-    create_csv_report(writer, gt_date)
+    queryset = request.user.orders.all()
+    create_csv_report(writer, gt_date, queryset)
     return response
