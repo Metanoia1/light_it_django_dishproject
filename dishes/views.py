@@ -4,7 +4,7 @@ import codecs
 from datetime import timedelta
 
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DetailView
 from django.utils.timezone import now
@@ -26,15 +26,14 @@ logger = logging.getLogger(__name__)
 
 def login_user(request):
     if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
+        form = AuthenticationForm(data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data["username"]
+            password = form.cleaned_data["password"]
+            user = authenticate(request, username=username, password=password)
             login(request, user)
             return redirect('dishes:index')
-        else:
-            messages.info(request, 'login or password is incorrect')
-    return render(request, 'dishes/login.html')
+    return render(request, 'dishes/login.html', {"form": AuthenticationForm()})
 
 
 def register_user(request):
