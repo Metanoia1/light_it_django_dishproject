@@ -4,6 +4,7 @@ import codecs
 from datetime import timedelta
 
 from django.urls import reverse
+from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -39,6 +40,8 @@ def login_user(request):
             if "next" in content:
                 return redirect(content["next"])
             return redirect("dishes:index")
+        messages.info(request, "incorrect login or password")
+        logger.warning("incorrect login or password")
     return render(request, "dishes/login.html", {"form": AuthenticationForm()})
 
 
