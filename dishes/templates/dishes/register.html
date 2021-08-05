@@ -1,0 +1,18 @@
+{% extends 'dishes/layout.html' %}
+
+{% block title %}REGISTER{% endblock %}
+
+{% block content %}
+
+  <h1>Register page</h1><br>
+
+  <form method="POST">
+    {% csrf_token %}
+    {{ form }}
+    <div class="col-12"><br>
+      <button class="btn btn-primary" type="submit">Register</button>
+      <a href="{% url 'dishes:login' %}">Log in</a>
+    </div>
+  </form>
+
+{% endblock %}
