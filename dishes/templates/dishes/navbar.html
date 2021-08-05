@@ -3,7 +3,8 @@
   aria-label="Fourth navbar example">
 
   <div class="container-fluid">
-    <a class="navbar-brand" href="{% url 'dishes:index' %}">{{ user }}|home</a>
+    <a class="navbar-brand" href="{% url 'dishes:index' %}"
+      >{% if user.is_authenticated%}{{ user }}|home{% else %}home{% endif %}</a>
 
     <button
       class="navbar-toggler"
