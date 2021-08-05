@@ -42,7 +42,7 @@ def register_user(request):
         form = UserCreationForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('dishes:index')
+            return redirect('dishes:login')
     return render(request, 'dishes/register.html', {'form':form})
 
 

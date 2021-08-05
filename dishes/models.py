@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 
 class Ingredient(models.Model):
@@ -26,6 +27,7 @@ class Dish(models.Model):
 
 
 class Order(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     dish = models.ForeignKey(
         Dish, on_delete=models.CASCADE, related_name="orders"
     )
