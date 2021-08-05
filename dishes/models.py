@@ -30,8 +30,6 @@ class Order(models.Model):
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        blank=True,
-        null=True,
         related_name="orders",
     )
     dish = models.ForeignKey(
