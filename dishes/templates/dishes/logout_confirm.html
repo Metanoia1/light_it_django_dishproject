@@ -1,0 +1,16 @@
+{% extends 'dishes/layout.html' %}
+
+{% block title %}LOGOUT CONFIRM{% endblock %}
+
+{% block content %}
+  <h1>Are you sure you wanna to "Log out"?</h1><br>
+
+  <form method="POST">
+    {% csrf_token %}
+    <div class="col-12">
+      <button class="btn btn-danger" type="submit">yes</button>
+      <a href={% url 'dishes:index' %}>cancel</a>
+    </div>
+  </form>
+
+{% endblock %}

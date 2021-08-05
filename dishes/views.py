@@ -4,6 +4,7 @@ import codecs
 from datetime import timedelta
 
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DetailView
@@ -46,6 +47,14 @@ def register_user(request):
     return render(request, 'dishes/register.html', {'form':form})
 
 
+@login_required(login_url='dishes:login')
+def logout_user(request):
+    if request.method == 'POST':
+        logout(request)
+        return redirect('dishes:index')
+    return render(request, 'dishes/logout_confirm.html')
+
+
 class DishList(ListView):
     model = Dish
     template_name = "dishes/index.html"
@@ -73,7 +82,9 @@ class OrderList(ListView):
     context_object_name = "orders"
 
     def get_queryset(self):
-        return self.request.user.orders.prefetch_related("oi__ingredient")
+        if self.request.user.is_authenticated:
+            return self.request.user.orders.prefetch_related("oi__ingredient")
+        return Order.objects.none()
 
 
 class DishFilter(ListView):
@@ -129,6 +140,11 @@ def get_csv_report(request):
     response.write(codecs.BOM_UTF8)
     writer = csv.writer(response, delimiter=",")
     gt_date = now() - timedelta(days=1)
-    queryset = request.user.orders.all()
+
+    if request.user.is_authenticated:
+        queryset = request.user.orders.all()
+    else:
+        queryset = Order.objects.none()
+
     create_csv_report(writer, gt_date, queryset)
     return response
