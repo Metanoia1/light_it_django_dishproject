@@ -8,7 +8,7 @@
 
   <form method="POST">
     {% csrf_token %}
-    {{ form }}
+    {{ form.as_p }}
     <div class="col-12"><br>
       <button class="btn btn-primary" type="submit">Register</button>
       <a href="{% url 'dishes:login' %}">Log in</a>
