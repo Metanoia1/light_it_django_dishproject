@@ -66,32 +66,21 @@ def create_csv_report(writer, gt_date, queryset):
     )
     for order in queryset.filter(created_at__gt=gt_date):
         dish = order.dish
-        di = dish.di.all()
-        dish_ingredients = " ".join(
-            f"{obj.ingredient.title}-{obj.amount}" for obj in di
-        ).split()
-
-        order_ingredients = " ".join(
-            f"{obj.ingredient.title}-{obj.amount}" for obj in order.oi.all()
-        ).split()
-
+        di = [f"{obj.ingredient.title}-{obj.amount}" for obj in dish.di.all()]
+        oi = [f"{obj.ingredient.title}-{obj.amount}" for obj in order.oi.all()]
         is_changed = False
         changed_ingredients = []
-        for string in order_ingredients:
-            if string not in dish_ingredients:
+
+        for string in oi:
+            if string not in di:
                 is_changed = True
                 changed_ingredients.append(string)
-
-        if is_changed:
-            is_changed = "TRUE"
-        else:
-            is_changed = "FALSE"
 
         row = [
             order.id,
             order.created_at,
             order.dish.title,
-            " ".join(f"{obj.ingredient.title}-{obj.amount}" for obj in di),
+            " ".join(di),
             is_changed,
             " ".join(changed_ingredients),
         ]
