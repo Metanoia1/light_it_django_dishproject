@@ -1,6 +1,8 @@
 import pytest
 from pytest_django.fixtures import db
 
+from django.contrib.auth.models import User
+
 from dishes.models import Dish, Order, Ingredient
 
 
@@ -45,18 +47,23 @@ def d4(db):
 
 
 @pytest.fixture
-def o1(db):
+def user(db):
+    return User.objects.create(username="username", password="password")
+
+
+@pytest.fixture
+def o1(user):
     dish = Dish.objects.create(title="dish_1")
-    return Order.objects.create(dish=dish)
+    return Order.objects.create(dish=dish, user=user)
 
 
 @pytest.fixture
-def o2(db):
+def o2(user):
     dish = Dish.objects.create(title="dish_2")
-    return Order.objects.create(dish=dish)
+    return Order.objects.create(dish=dish, user=user)
 
 
 @pytest.fixture
-def o3(db):
+def o3(user):
     dish = Dish.objects.create(title="dish_3")
-    return Order.objects.create(dish=dish)
+    return Order.objects.create(dish=dish, user=user)
