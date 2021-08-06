@@ -5,6 +5,8 @@ from datetime import timedelta
 
 from django.urls import reverse
 from django.contrib import messages
+from django.views.decorators.cache import cache_page
+from django.core.cache import caches
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -28,7 +30,10 @@ from .utils import (
 logger = logging.getLogger(__name__)
 
 
+@cache_page(60, cache="db_cache")
 def login_user(request):
+    if request.user.is_authenticated:
+        return redirect("dishes:index")
     if request.method == "POST":
         form = AuthenticationForm(data=request.POST)
         if form.is_valid():
@@ -45,7 +50,10 @@ def login_user(request):
     return render(request, "dishes/login.html", {"form": AuthenticationForm()})
 
 
+@cache_page(60, cache="db_cache")
 def register_user(request):
+    if request.user.is_authenticated:
+        return redirect("dishes:index")
     form = UserCreationForm()
     if request.method == "POST":
         form = UserCreationForm(request.POST)
@@ -55,6 +63,7 @@ def register_user(request):
     return render(request, "dishes/register.html", {"form": form})
 
 
+@cache_page(60, cache="db_cache")
 @login_required(login_url="dishes:login")
 def logout_user(request):
     if request.method == "POST":
@@ -70,9 +79,16 @@ class DishList(ListView):
 
     def get_queryset(self):
         content = self.request.GET
+        db_cache = caches["db_cache"]
+        dishes = db_cache.get("dishes_list", [])
+
+        if not dishes:
+            dishes = Dish.objects.all()
+            db_cache.set("dishes_list", dishes, 60)
+
         if "title" in content:
             return Dish.objects.filter(title=content.get("title", None))
-        return Dish.objects.all()
+        return dishes
 
 
 class DishDetail(DetailView):
@@ -144,6 +160,7 @@ def create_order(request, dish_id):
     return render(request, "dishes/create_order.html", context)
 
 
+@login_required(login_url="dishes:login")
 def get_csv_report(request):
     response = HttpResponse(content_type="text/csv")
     response["Content-Disposition"] = 'attachment; filename="report.csv"'

@@ -9,6 +9,8 @@
     <p class="text-danger"><strong>{{ message }}</strong></p>
   {% endfor %}
 
+  {% load cache %}
+  {% cache 3600 loginform %}
   <form method="POST">
     {% csrf_token %}
     {{ form.as_p }}
@@ -18,5 +20,6 @@
       <a href="{% url 'dishes:register' %}">Register</a>
     </div>
   </form>
+  {% endcache %}
 
 {% endblock %}

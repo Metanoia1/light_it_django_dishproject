@@ -39,18 +39,26 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django_celery_results",
     "django_celery_beat",
+    "debug_toolbar",
     "dishes.apps.DishesConfig",
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    # "django.middleware.cache.UpdateCacheMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
+    # "django.middleware.cache.FetchFromCacheMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
+
+# DEBUG-TOOL-BAR
+INTERNAL_IPS = ["127.0.0.1"]
 
 ROOT_URLCONF = "dishproject.urls"
 
@@ -173,6 +181,21 @@ CELERY_BEAT_SCHEDULE = {
         "task": "dishes.tasks.report",
         "schedule": crontab(hour=22, minute=0),
     }
+}
+
+# CACHE
+CACHE_MIDDLEWARE_SECONDS = 3600
+
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.memcached.PyMemcacheCache",
+        "LOCATION": "127.0.0.1:11211",
+    },
+    "db_cache": {
+        "BACKEND": "django.core.cache.backends.db.DatabaseCache",
+        "LOCATION": "my_cache_table",
+        "TIMEOUT": 3600,
+    },
 }
 
 

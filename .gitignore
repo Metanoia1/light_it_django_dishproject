@@ -3,5 +3,5 @@ settings_local.py
 celerybeat-schedule
 django
 db.sqlite3
-log.log
+log*
 report.csv
