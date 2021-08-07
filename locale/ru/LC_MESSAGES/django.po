@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-07 20:53+0300\n"
+"POT-Creation-Date: 2021-08-07 21:42+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -163,6 +163,10 @@ msgstr "ID ЗАКАЗА"
 msgid "Dish"
 msgstr "Блюдо"
 
+#: dishes/templates/dishes/orders.html:11
+msgid "There are no orders..."
+msgstr "У Вас нет заказов..."
+
 #: dishes/templates/dishes/register.html:4
 msgid "REGISTRATION"
 msgstr "РЕГИСТРАЦИЯ"
@@ -175,6 +179,6 @@ msgstr "Страница регистрации"
 msgid "Register"
 msgstr "Зарегистрироваться"
 
-#: dishes/views.py:148
+#: dishes/views.py:144
 msgid "ORDER CREATION"
 msgstr "СОЗДАНИЕ ЗАКАЗА"

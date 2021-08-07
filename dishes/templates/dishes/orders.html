@@ -8,9 +8,10 @@
 {% translate "Dish" as dish %}
 {% translate "ingredient" as ingredient %}
 {% translate "amount" as amount %}
+{% translate "There are no orders..." as noorders %}
 
   {% if not orders %}
-    <h1>There are no orders...</h1>
+    <h1>{{ noorders }}</h1>
   {% endif %}
 
   {% for order in orders %}
