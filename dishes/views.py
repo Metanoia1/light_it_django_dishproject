@@ -4,7 +4,6 @@ import codecs
 from datetime import timedelta
 
 from django.urls import reverse
-from django.views.decorators.cache import cache_page
 from django.core.cache import caches
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -25,7 +24,6 @@ from . import utils
 logger = logging.getLogger(__name__)
 
 
-@cache_page(60, cache="db_cache")
 def login_user(request):
     if request.user.is_authenticated:
         return redirect("dishes:index")
@@ -45,7 +43,6 @@ def login_user(request):
     return render(request, "dishes/login.html", {"form": AuthenticationForm()})
 
 
-@cache_page(60, cache="db_cache")
 def register_user(request):
     if request.user.is_authenticated:
         return redirect("dishes:index")
@@ -58,7 +55,6 @@ def register_user(request):
     return render(request, "dishes/register.html", {"form": form})
 
 
-@cache_page(60, cache="db_cache")
 @login_required(login_url="dishes:login")
 def logout_user(request):
     if request.method == "POST":
