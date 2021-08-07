@@ -1,17 +1,20 @@
 {% extends 'dishes/layout.html' %}
+{% load i18n %}
 
-{% block title %}DISHES{% endblock %}
+{% block title %}{% translate "DISHES LIST" %}{% endblock %}
 
 {% block content %}
+{% translate "There are no dishes..." as nodishes %}
+{% translate "details" as details %}
 
   {% if not dishes %}
-    <h1>There are no dishes...</h1>
+    <h1>{{ nodishes }}</h1>
   {% endif %}
 
   {% for dish in dishes %}
     <h1>{{ dish.title }}</h1>
     <div class="mb-1 text-muted">{{ dish.created_at }}</div>
-    <a href="{% url 'dishes:details' dish.id %}">details</a>
+    <a href="{% url 'dishes:details' dish.id %}">{{ details }}</a>
     <hr>
   {% endfor %}
 

@@ -1,9 +1,14 @@
 from django.core.exceptions import ValidationError
 from django.forms import modelformset_factory
 from django.contrib import messages
+from django.utils.translation import gettext as _
 
 from .forms import OrderIngredientModelForm
 from .models import OrderIngredient, Order
+
+
+INCORRECT_VALUE_MSG = "incorrect value"
+TRY_YYYY_MM_DD_MSG = "try yyyy-mm-dd format"
 
 
 def filter_gt(content, request, dishes):
@@ -14,7 +19,7 @@ def filter_gt(content, request, dishes):
         if gt_content:
             messages.info(
                 request,
-                f"incorrect value '{gt_content}' try yyyy-mm-dd format",
+                f'{INCORRECT_VALUE_MSG} "{gt_content}" {TRY_YYYY_MM_DD_MSG}',
             )
     return dishes
 
@@ -27,7 +32,7 @@ def filter_lt(content, request, dishes):
         if lt_content:
             messages.info(
                 request,
-                f"incorrect value '{lt_content}' try yyyy-mm-dd format",
+                f'{INCORRECT_VALUE_MSG} "{lt_content}" {TRY_YYYY_MM_DD_MSG}',
             )
     return dishes
 

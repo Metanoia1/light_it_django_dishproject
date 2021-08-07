@@ -1,8 +1,12 @@
 {% extends 'dishes/layout.html' %}
+{% load i18n %}
 
-{% block title %}DISH DESCRIPTION{% endblock %}
+{% block title %}{% translate "DISH DESCRIPTION" %}{% endblock %}
 
 {% block content %}
+{% translate "ingredient" as ingredient %}
+{% translate "amount" as amount %}
+{% translate "CREATE ORDER" as create %}
 
   <h3>{{ dish.title }}</h3>
   <div class="mb-1 text-muted">{{ dish.created_at }}</div>
@@ -15,14 +19,14 @@
 
   {% for item in dish.di.all %}
     <p>
-      <strong>ingredient:</strong> {{ item.ingredient.title }},
-      <strong>amount:</strong> {{ item.amount }}
+      <strong>{{ ingredient }}:</strong> {{ item.ingredient.title }},
+      <strong>{{ amount }}:</strong> {{ item.amount }}
     </p>
   {% endfor %}
   <hr>
 
   <a
     href="{% url 'dishes:order' dish.id %}"
-    class="btn btn-primary">CREATE ORDER</button></a>
+    class="btn btn-primary">{{ create }}</button></a>
 
 {% endblock %}

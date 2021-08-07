@@ -1,25 +1,27 @@
 {% extends 'dishes/layout.html' %}
+{% load i18n %}
 
-{% block title %}LOGIN{% endblock %}
+{% block title %}{% translate "LOGIN" %}{% endblock %}
 
 {% block content %}
-  <h1>Login page</h1><br>
+{% translate "Login page" as lp %}
+{% translate "Registration" as registration %}
+{% translate "LogIn" as login %}
+
+  <h1>{{ lp }}</h1><br>
 
   {% for message in messages %}
     <p class="text-danger"><strong>{{ message }}</strong></p>
   {% endfor %}
 
-  {% load cache %}
-  {% cache 3600 loginform %}
-  <form method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <div class="col-12">
-      <br>
-      <button class="btn btn-primary" type="submit">Log in</button>
-      <a href="{% url 'dishes:register' %}">Register</a>
-    </div>
-  </form>
-  {% endcache %}
+    <form method="POST">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <div class="col-12">
+        <br>
+        <button class="btn btn-primary" type="submit">{{ login }}</button>
+        <a href="{% url 'dishes:register' %}">{{ registration }}</a>
+      </div>
+    </form>
 
 {% endblock %}

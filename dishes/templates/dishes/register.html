@@ -1,17 +1,21 @@
 {% extends 'dishes/layout.html' %}
+{% load i18n %}
 
-{% block title %}REGISTER{% endblock %}
+{% block title %}{% translate "REGISTRATION" %}{% endblock %}
 
 {% block content %}
+{% translate "Register page" as register_page %}
+{% translate "Register" as register %}
+{% translate "Log In" as login %}
 
-  <h1>Register page</h1><br>
+  <h1>{{ register_page }}</h1><br>
 
   <form method="POST">
     {% csrf_token %}
     {{ form.as_p }}
     <div class="col-12"><br>
-      <button class="btn btn-primary" type="submit">Register</button>
-      <a href="{% url 'dishes:login' %}">Log in</a>
+      <button class="btn btn-primary" type="submit">{{ register }}</button>
+      <a href="{% url 'dishes:login' %}">{{ login }}</a>
     </div>
   </form>
 

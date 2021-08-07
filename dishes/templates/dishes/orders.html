@@ -1,20 +1,25 @@
 {% extends 'dishes/layout.html' %}
+{% load i18n %}
 
-{% block title %}ORDERS{% endblock %}
+{% block title %}{% translate "ORDERS" %}{% endblock %}
 
 {% block content %}
+{% translate "ORDER_ID" as orderid %}
+{% translate "Dish" as dish %}
+{% translate "ingredient" as ingredient %}
+{% translate "amount" as amount %}
 
   {% if not orders %}
     <h1>There are no orders...</h1>
   {% endif %}
 
   {% for order in orders %}
-    <p><strong>ORDER_ID: </strong>{{ order.id }}</p>
-    <p><strong>Dish: </strong>{{ order.dish.title }}</p>
+    <p><strong>{{ orderid }}: </strong>{{ order.id }}</p>
+    <p><strong>{{ dish }}: </strong>{{ order.dish.title }}</p>
     {% for item in order.oi.all %}
     <p>
-      <strong>ingredient:</strong> {{ item.ingredient.title }},
-      <strong>amount:</strong> {{ item.amount }}
+      <strong>{{ ingredient }}:</strong> {{ item.ingredient.title }},
+      <strong>{{ amount }}:</strong> {{ item.amount }}
     </p>
     {% endfor %}
     <div class="mb-1 text-muted">{{ user }}|{{ order.created_at }}</div>

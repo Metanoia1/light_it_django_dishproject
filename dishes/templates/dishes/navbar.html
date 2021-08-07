@@ -1,10 +1,22 @@
+{% load i18n %}
+{% translate "home" as main %}
+{% translate "Search" as search %}
+{% translate "Filters" as filters %}
+{% translate "Languages" as languages %}
+{% translate "Translate" as translate %}
+{% translate "Orders" as orders %}
+{% translate "CSV-Report" as report %}
+{% translate "Log Out" as out %}
+{% translate "Log In" as lin %}
+{% translate "dish title exact" as search_placeholder %}
 <nav
   class="navbar navbar-expand-md navbar-dark bg-dark"
   aria-label="Fourth navbar example">
 
   <div class="container-fluid">
     <a class="navbar-brand" href="{% url 'dishes:index' %}"
-      >{% if user.is_authenticated%}{{ user }}|home{% else %}home{% endif %}</a>
+      >{% if user.is_authenticated %}{{ user }}|{{ main }}{% else %}{{ main }}{% endif %}
+    </a>
 
     <button
       class="navbar-toggler"
@@ -16,35 +28,60 @@
       aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-
     <form action="{% url 'dishes:index' %}"class="d-flex" method="get">
       <input
         type="text"
         name="title"
         class="form-control me-2"
-        placeholder="dish title exact"
+        placeholder="{{ search_placeholder }}"
         required
         aria-label="Search">
-      <button class="btn btn-outline-success" type="submit">Search</button>
+      <button class="btn btn-outline-success" type="submit">{{ search }}</button>
     </form>
 
     <div class="collapse navbar-collapse" id="navbarsExample04">
       <ul class="navbar-nav me-auto mb-2 mb-md-0">
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'dishes:filters' %}">Filters</a>
+          <a class="nav-link" href="{% url 'dishes:filters' %}">{{ filters }}</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a
+            class="nav-link dropdown-toggle"
+            href="#" id="dropdown07"
+            data-bs-toggle="dropdown"
+            aria-expanded="false">{{ languages }}</a>
+          <ul class="dropdown-menu" aria-labelledby="dropdown07">
+          <form action="{% url 'set_language' %}" method="post">{% csrf_token %}
+            <input name="next" type="hidden" value="{{ redirect_to }}">
+            <select class="form-select" name="language">
+            {% get_current_language as LANGUAGE_CODE %}
+            {% get_available_languages as LANGUAGES %}
+            {% get_language_info_list for LANGUAGES as languages %}
+            {% for language in languages %}
+              <option
+                value="{{ language.code }}"
+                {% if language.code == LANGUAGE_CODE %}
+                selected
+                {% endif %}>{{ language.name_local }} ({{ language.code }})
+              </option>
+            {% endfor %}
+            </select>
+            <input class="btn text-info" type="submit" value="{{ translate }}">
+          </form>
+          </ul>
         </li>
       {% if user.is_authenticated %}
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'dishes:orders' %}">Orders</a>
+          <a class="nav-link" href="{% url 'dishes:orders' %}">{{ orders }}</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'dishes:report' %}">CSV-Report</a>
+          <a class="nav-link" href="{% url 'dishes:report' %}">{{ report }}</a>
         </li>
       </ul>
-        <a class="btn btn-outline-danger" href="{% url 'dishes:logout' %}">LogOut</a>
+        <a class="btn btn-outline-danger" href="{% url 'dishes:logout' %}">{{ out }}</a>
       {% else %}
       </ul>
-        <a class="btn btn-outline-info" href="{% url 'dishes:login' %}">LogIn</a>
+        <a class="btn btn-outline-info" href="{% url 'dishes:login' %}">{{ lin }}</a>
       {% endif %}
     </div>
 

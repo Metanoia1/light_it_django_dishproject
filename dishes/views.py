@@ -4,9 +4,9 @@ import codecs
 from datetime import timedelta
 
 from django.urls import reverse
-from django.contrib import messages
 from django.views.decorators.cache import cache_page
 from django.core.cache import caches
+from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -14,17 +14,12 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DetailView
 from django.utils.timezone import now
+
+from django.utils.translation import gettext as _
 from django.http import HttpResponse
 
 from .models import Dish, Order, OrderIngredient
-from .utils import (
-    merge_instances_with_order,
-    create_csv_report,
-    get_oi_formset,
-    get_oi_initial,
-    filter_gt,
-    filter_lt,
-)
+from . import utils
 
 
 logger = logging.getLogger(__name__)
@@ -122,10 +117,10 @@ class DishFilter(ListView):
         dishes = Dish.objects.filter(title__icontains=content.get("title", ""))
 
         if "gt" in content:
-            dishes = filter_gt(content, self.request, dishes)
+            dishes = utils.filter_gt(content, self.request, dishes)
 
         if "lt" in content:
-            dishes = filter_lt(content, self.request, dishes)
+            dishes = utils.filter_lt(content, self.request, dishes)
 
         return dishes[::-1] if "reverse" in content else dishes
 
@@ -136,24 +131,25 @@ def create_order(request, dish_id):
     dish = get_object_or_404(Dish, pk=dish_id)
     ingredients = dish.di.select_related("ingredient")
     amount = ingredients.count()
-    OrderIngredientFormSet = get_oi_formset(extra=amount, max_num=amount)
+    OrderIngredientFormSet = utils.get_oi_formset(extra=amount, max_num=amount)
 
     if request.method == "POST":
         formset = OrderIngredientFormSet(request.POST)
         if formset.is_valid():
             order = Order.objects.create(dish_id=dish.id, user=request.user)
             instances = formset.save(commit=False)
-            merge_instances_with_order(instances, order)
+            utils.merge_instances_with_order(instances, order)
             formset.save()
             return redirect("dishes:orders")
         logger.warning("formset is not valid with data: %s", request.POST)
         return redirect("dishes:order", dish_id)
 
     context = {
+        "title": _("ORDER CREATION"),
         "dish": dish,
         "formset": OrderIngredientFormSet(
             queryset=OrderIngredient.objects.none(),
-            initial=get_oi_initial(ingredients),
+            initial=utils.get_oi_initial(ingredients),
         ),
     }
 
@@ -173,5 +169,5 @@ def get_csv_report(request):
     else:
         queryset = Order.objects.none()
 
-    create_csv_report(writer, gt_date, queryset)
+    utils.create_csv_report(writer, gt_date, queryset)
     return response

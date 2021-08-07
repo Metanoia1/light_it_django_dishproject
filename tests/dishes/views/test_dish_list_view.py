@@ -13,6 +13,7 @@ def test_success(client):
     assert Dish.objects.count() == 0
 
 
+@pytest.mark.django_db
 def test_success_rf(rf):
     request = rf.get(reverse("dishes:index"))
     resp = DishList.as_view()(request)

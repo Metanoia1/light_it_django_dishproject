@@ -1,0 +1,180 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-08-07 20:53+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
+"%100>=11 && n%100<=14)? 2 : 3);\n"
+
+#: dishes/templates/dishes/create_order.html:7
+msgid "ORDER"
+msgstr "ЗАКАЗАТЬ"
+
+#: dishes/templates/dishes/details.html:4
+msgid "DISH DESCRIPTION"
+msgstr "ОПИСАНИЕ БЛЮДА"
+
+#: dishes/templates/dishes/details.html:7 dishes/templates/dishes/orders.html:9
+msgid "ingredient"
+msgstr "ингредиент"
+
+#: dishes/templates/dishes/details.html:8
+#: dishes/templates/dishes/orders.html:10
+msgid "amount"
+msgstr "количество"
+
+#: dishes/templates/dishes/details.html:9
+msgid "CREATE ORDER"
+msgstr "ОФОРМИТЬ ЗАКАЗ"
+
+#: dishes/templates/dishes/filters.html:4
+msgid "FILTERS"
+msgstr "ФИЛЬТРЫ"
+
+#: dishes/templates/dishes/filters.html:7
+msgid "dish title contains"
+msgstr "содержится в названии"
+
+#: dishes/templates/dishes/filters.html:8
+msgid "min date value"
+msgstr "минимальная дата"
+
+#: dishes/templates/dishes/filters.html:9
+msgid "max date value"
+msgstr "максимальная дата"
+
+#: dishes/templates/dishes/filters.html:10
+#: dishes/templates/dishes/navbar.html:3
+msgid "Search"
+msgstr "Поиск"
+
+#: dishes/templates/dishes/filters.html:11
+msgid "reverse"
+msgstr "перевернуть"
+
+#: dishes/templates/dishes/filters.html:12
+msgid "close"
+msgstr "закрыть"
+
+#: dishes/templates/dishes/filters.html:13 dishes/templates/dishes/index.html:8
+msgid "details"
+msgstr "подробнее"
+
+#: dishes/templates/dishes/filters.html:14 dishes/templates/dishes/index.html:7
+msgid "There are no dishes..."
+msgstr "Блюда не найдены..."
+
+#: dishes/templates/dishes/index.html:4
+msgid "DISHES LIST"
+msgstr "СПИСОК БЛЮД"
+
+#: dishes/templates/dishes/login.html:4
+msgid "LOGIN"
+msgstr "ВХОД"
+
+#: dishes/templates/dishes/login.html:7
+msgid "Login page"
+msgstr "Страница входа"
+
+#: dishes/templates/dishes/login.html:8
+msgid "Registration"
+msgstr "Регистрация"
+
+#: dishes/templates/dishes/login.html:9
+msgid "LogIn"
+msgstr "Войти"
+
+#: dishes/templates/dishes/logout_confirm.html:4
+msgid "LOGOUT CONFIRM"
+msgstr "ПОДТВЕРДИТЕ ВЫХОД"
+
+#: dishes/templates/dishes/logout_confirm.html:7
+msgid "yes"
+msgstr "да"
+
+#: dishes/templates/dishes/logout_confirm.html:8
+msgid "cancel"
+msgstr "нет"
+
+#: dishes/templates/dishes/logout_confirm.html:10
+msgid "Are you sure you wanna to LogOut?"
+msgstr "Вы уверены, что хотите выйти?"
+
+#: dishes/templates/dishes/navbar.html:2
+msgid "home"
+msgstr "главная"
+
+#: dishes/templates/dishes/navbar.html:4
+msgid "Filters"
+msgstr "Фильтры"
+
+#: dishes/templates/dishes/navbar.html:5
+msgid "Languages"
+msgstr "Языки"
+
+#: dishes/templates/dishes/navbar.html:6
+msgid "Translate"
+msgstr "Перевести"
+
+#: dishes/templates/dishes/navbar.html:7
+msgid "Orders"
+msgstr "Заказы"
+
+#: dishes/templates/dishes/navbar.html:8
+msgid "CSV-Report"
+msgstr "CSV-Отчет"
+
+#: dishes/templates/dishes/navbar.html:9
+msgid "Log Out"
+msgstr "Выход"
+
+#: dishes/templates/dishes/navbar.html:10
+#: dishes/templates/dishes/register.html:9
+msgid "Log In"
+msgstr "Вход"
+
+#: dishes/templates/dishes/navbar.html:11
+msgid "dish title exact"
+msgstr "точное название"
+
+#: dishes/templates/dishes/orders.html:4
+msgid "ORDERS"
+msgstr "ЗАКАЗЫ"
+
+#: dishes/templates/dishes/orders.html:7
+msgid "ORDER_ID"
+msgstr "ID ЗАКАЗА"
+
+#: dishes/templates/dishes/orders.html:8
+msgid "Dish"
+msgstr "Блюдо"
+
+#: dishes/templates/dishes/register.html:4
+msgid "REGISTRATION"
+msgstr "РЕГИСТРАЦИЯ"
+
+#: dishes/templates/dishes/register.html:7
+msgid "Register page"
+msgstr "Страница регистрации"
+
+#: dishes/templates/dishes/register.html:8
+msgid "Register"
+msgstr "Зарегистрироваться"
+
+#: dishes/views.py:148
+msgid "ORDER CREATION"
+msgstr "СОЗДАНИЕ ЗАКАЗА"

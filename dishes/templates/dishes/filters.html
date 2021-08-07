@@ -1,8 +1,17 @@
 {% extends 'dishes/layout.html' %}
+{% load i18n %}
 
-{% block title %}FILTERS{% endblock %}
+{% block title %}{% translate "FILTERS" %}{% endblock %}
 
 {% block content %}
+{% translate "dish title contains" as filter_placeholder %}
+{% translate "min date value" as mind %}
+{% translate "max date value" as maxd %}
+{% translate "Search" as search %}
+{% translate "reverse" as reverse %}
+{% translate "close" as close %}
+{% translate "details" as details %}
+{% translate "There are no dishes..." as emptyd %}
 
   <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" method="get">
     <input
@@ -10,7 +19,7 @@
       name="title"
       value="{{ request.GET.title }}"
       class="form-control form-control-dark"
-      placeholder="dish title contains">
+      placeholder="{{ filter_placeholder }}">
     <br>
     <div class="row">
       <div class="col">
@@ -19,7 +28,7 @@
               name="gt"
               value="{{ request.GET.gt }}"
               maxlength="10">
-            <label for="floatingInput">min date value</label>
+            <label for="floatingInput">{{ mind }}</label>
           </div>
       </div>
       <div class="col">
@@ -28,7 +37,7 @@
               name="lt"
               value="{{ request.GET.lt }}"
               maxlength="10">
-              <label for="floatingInput">max date value</label>
+            <label for="floatingInput">{{ maxd }}</label>
           </div>
       </div>
     </div>
@@ -38,20 +47,20 @@
     {% endfor %}
 
     <input type="checkbox" name="reverse">
-    <p>reverse</p>
-    <button class="btn btn-outline-primary" type="submit">Search</button>
-    <a class="text-danger" href="{% url 'dishes:index' %}">close</a>
+    <p>{{ reverse }}</p>
+    <button class="btn btn-outline-primary" type="submit">{{ search }}</button>
+    <a class="text-danger" href="{% url 'dishes:index' %}">{{ close }}</a>
   </form>
   <hr>
 
   {% if not dishes %}
-    <h1>There are no dishes...</h1>
+    <h1>{{ emptyd }}</h1>
   {% endif %}
 
   {% for dish in dishes %}
     <h1>{{ dish.title }}</h1>
     <div class="mb-1 text-muted">{{ dish.created_at }}</div>
-    <a href="{% url 'dishes:details' dish.id %}">details</a>
+    <a href="{% url 'dishes:details' dish.id %}">{{ details }}</a>
     <hr>
   {% endfor %}
 

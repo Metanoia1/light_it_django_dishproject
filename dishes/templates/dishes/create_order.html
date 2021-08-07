@@ -1,8 +1,10 @@
 {% extends 'dishes/layout.html' %}
+{% load i18n %}
 
-{% block title %}ORDER CREATION{% endblock %}
+{% block title %}{{ title }}{% endblock %}
 
 {% block content %}
+{% translate "ORDER" as order %}
 
   <h3>{{ dish.title }}</h3>
   <hr>
@@ -11,7 +13,7 @@
     {% csrf_token %}
     {{ formset.as_p }}
     <div class="col-12">
-      <button class="btn btn-primary" type="submit">ORDER</button>
+      <button class="btn btn-primary" type="submit">{{ order }}</button>
     </div>
   </form>
 
