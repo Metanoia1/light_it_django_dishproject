@@ -1,5 +1,4 @@
 {% extends 'dishes/layout.html' %}
-{% load cache %}
 {% load i18n %}
 
 {% block title %}{% translate "LOGIN" %}{% endblock %}
@@ -15,7 +14,6 @@
     <p class="text-danger"><strong>{{ message }}</strong></p>
   {% endfor %}
 
-  {% cache 60 form %}
     <form method="POST">
       {% csrf_token %}
       {{ form.as_p }}
@@ -25,6 +23,5 @@
         <a href="{% url 'dishes:register' %}">{{ registration }}</a>
       </div>
     </form>
-  {% endcache %}
 
 {% endblock %}
