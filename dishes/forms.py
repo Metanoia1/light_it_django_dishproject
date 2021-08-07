@@ -22,10 +22,3 @@ class OrderIngredientModelForm(forms.ModelForm):
     class Meta:
         model = models.OrderIngredient
         fields = ("ingredient", "amount")
-
-
-# birth_date = forms.DateField(
-#     widget=DateTimePicker(
-#         options={"format": "YYYY-MM-DD", "pickSeconds": False}
-#     )
-# )
