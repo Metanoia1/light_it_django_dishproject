@@ -39,7 +39,7 @@ def login_user(request):
                 return redirect(content["next"])
             return redirect("dishes:index")
         messages.info(request, "incorrect login or password")
-        logger.warning("incorrect login or password")
+        logger.warning("incorrect login or password: %s", request.POST)
     return render(request, "dishes/login.html", {"form": AuthenticationForm()})
 
 
@@ -123,7 +123,6 @@ class DishFilter(ListView):
 
 @login_required(login_url="dishes:login")
 def create_order(request, dish_id):
-    logger.debug("create_order called...")
     dish = get_object_or_404(Dish, pk=dish_id)
     ingredients = dish.di.select_related("ingredient")
     amount = ingredients.count()
@@ -137,7 +136,7 @@ def create_order(request, dish_id):
             utils.merge_instances_with_order(instances, order)
             formset.save()
             return redirect("dishes:orders")
-        logger.warning("formset is not valid with data: %s", request.POST)
+        logger.warning("formset is not valid: %s", request.POST)
         return redirect("dishes:order", dish_id)
 
     context = {

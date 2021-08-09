@@ -138,20 +138,32 @@ LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
     "formatters": {
-        "dish_formatter": {
-            "format": "{levelname} {asctime} {module} {message}",
+        "timedrotatig": {
+            "format": "timedrotatig:{levelname} {asctime} {module} {message}",
+            "style": "{",
+        },
+        "rotating": {
+            "format": "rotating:{levelname} {asctime} {module} {message}",
             "style": "{",
         },
     },
     "handlers": {
-        "file": {
+        "file_timedrotating": {
             "level": "WARNING",
             "class": "logging.handlers.TimedRotatingFileHandler",
             "filename": BASE_DIR / "log.log",
-            "backupCount": 10,
             "when": "D",
             "interval": 1,
-            "formatter": "dish_formatter",
+            "formatter": "timedrotatig",
+            "backupCount": 1,
+        },
+        "file_rotating": {
+            "level": "WARNING",
+            "class": "logging.handlers.RotatingFileHandler",
+            "filename": BASE_DIR / "log.log",
+            "maxBytes": 1024*1024*5,
+            "formatter": "rotating",
+            "backupCount": 1,
         },
         "console": {
             "level": "DEBUG",
@@ -160,7 +172,7 @@ LOGGING = {
     },
     "loggers": {
         "dishes": {
-            "handlers": ["file", "console"],
+            "handlers": ["file_timedrotating", "file_rotating", "console"],
             "level": "DEBUG",
             "propagate": True,
         },
