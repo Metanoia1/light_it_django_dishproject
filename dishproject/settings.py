@@ -46,10 +46,8 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
-    # "django.middleware.cache.UpdateCacheMiddleware",
     "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
-    # "django.middleware.cache.FetchFromCacheMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
@@ -141,7 +139,7 @@ LOGGING = {
     "disable_existing_loggers": False,
     "formatters": {
         "dish_formatter": {
-            "format": "{levelname} {asctime} {module} {process:d} {thread:d} {message}",
+            "format": "{levelname} {asctime} {module} {message}",
             "style": "{",
         },
     },
@@ -184,25 +182,15 @@ CELERY_BEAT_SCHEDULE = {
 }
 
 # CACHE
-CACHE_MIDDLEWARE_SECONDS = 3600
-
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.memcached.PyMemcacheCache",
         "LOCATION": "127.0.0.1:11211",
     },
-    "db_cache": {
-        "BACKEND": "django.core.cache.backends.db.DatabaseCache",
-        "LOCATION": "my_cache_table",
-        "TIMEOUT": 3600,
-    },
 }
 
 # LOCALIZATION
-LANGUAGES = [
-    ("en", "English"),
-    ("ru", "Russian"),
-]
+LANGUAGES = [("en", "English"), ("ru", "Russian")]
 LOCALE_PATHS = [os.path.join(BASE_DIR, "locale")]
 
 

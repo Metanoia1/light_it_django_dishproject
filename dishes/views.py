@@ -70,7 +70,7 @@ class DishList(ListView):
 
     def get_queryset(self):
         content = self.request.GET
-        db_cache = caches["db_cache"]
+        db_cache = caches["default"]
         dishes = db_cache.get("dishes_list", [])
 
         if not dishes:
