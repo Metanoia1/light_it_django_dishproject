@@ -19,12 +19,6 @@ def test_get_dish_object_does_not_exist(client, user):
     assert resp.status_code == 404
 
 
-def test_formset_not_valid(client, d4):
-    resp = client.post(f"/dishes/order/{d4.id}")
-    assert resp.status_code == 302
-    assert Order.objects.count() == 0
-
-
 @pytest.mark.django_db
 def test_formset_is_valid(client, user):
     client.force_login(user)
@@ -48,9 +42,37 @@ def test_formset_is_valid(client, user):
         "form-2-amount": "5",
     }
     resp = client.post(f"/dishes/order/{dish.id}", data=data)
+    assert resp.status_code == 302
     assert Order.objects.count() == 1
     assert Order.objects.first().ingredients.count() == 3
     assert (
         list(Order.objects.first().ingredients.values_list("title", flat=True))
         == ingredient_names
     )
+
+
+@pytest.mark.django_db
+def test_formset_is_not_valid(client, user):
+    client.force_login(user)
+    dish = Dish.objects.create(title="dish")
+    ingredient_names = ["apple", "orange", "watermelon"]
+    dish.ingredients.set(
+        Ingredient.objects.create(title=name) for name in ingredient_names
+    )
+    ingredients = dish.di.select_related("ingredient")
+    amount = ingredients.count()
+    data = {
+        "form-TOTAL_FORMS": amount,
+        "form-INITIAL_FORMS": "0",
+        "form-MIN_NUM_FORMS": "0",
+        "form-MAX_NUM_FORMS": amount,
+        "form-0-ingredient": "apple",
+        "form-0-amount": "7",
+        "form-1-ingredient": "orange",
+        "form-1-amount": "15",
+        "form-2-ingredient": "watermelon",
+        "form-2-amount": "xxx",
+    }
+    resp = client.post(f"/dishes/order/{dish.id}", data=data)
+    assert resp.status_code == 302
+    assert Order.objects.count() == 0
