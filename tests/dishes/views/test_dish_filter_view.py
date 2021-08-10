@@ -24,7 +24,7 @@ def test_reverse_false(client, d1, d2, d3):
 
 def test_reverse_true(client, d1, d2, d3):
     resp = client.get("/dishes/filters/?reverse=on", follow=True)
-    assert len(resp.context["dishes"]) == 3
+    assert resp.context["dishes"].count() == 3
     assert resp.context["dishes"][0].pk == d1.pk
     assert resp.status_code == 200
 

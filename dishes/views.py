@@ -70,12 +70,12 @@ class DishList(ListView):
 
     def get_queryset(self):
         content = self.request.GET
-        db_cache = caches["default"]
-        dishes = db_cache.get("dishes_list", [])
+        mem_cache = caches["default"]
+        dishes = mem_cache.get("dishes_list", [])
 
         if not dishes:
             dishes = Dish.objects.all()
-            db_cache.set("dishes_list", dishes, 60)
+            mem_cache.set("dishes_list", dishes, 120)
 
         if "title" in content:
             return Dish.objects.filter(title=content.get("title", None))
@@ -118,7 +118,7 @@ class DishFilter(ListView):
         if "lt" in content:
             dishes = utils.filter_lt(content, self.request, dishes)
 
-        return dishes[::-1] if "reverse" in content else dishes
+        return dishes.reverse() if "reverse" in content else dishes
 
 
 @login_required(login_url="dishes:login")
@@ -131,24 +131,25 @@ def create_order(request, dish_id):
     if request.method == "POST":
         formset = OrderIngredientFormSet(request.POST)
         if formset.is_valid():
-            order = Order.objects.create(dish_id=dish.id, user=request.user)
             instances = formset.save(commit=False)
+            order = Order.objects.create(dish_id=dish.id, user=request.user)
             utils.merge_instances_with_order(instances, order)
             formset.save()
             return redirect("dishes:orders")
         logger.warning("formset is not valid: %s", request.POST)
         return redirect("dishes:order", dish_id)
-
-    context = {
-        "title": _("ORDER CREATION"),
-        "dish": dish,
-        "formset": OrderIngredientFormSet(
-            queryset=OrderIngredient.objects.none(),
-            initial=utils.get_oi_initial(ingredients),
-        ),
-    }
-
-    return render(request, "dishes/create_order.html", context)
+    return render(
+        request,
+        "dishes/create_order.html",
+        context={
+            "title": _("ORDER CREATION"),
+            "dish": dish,
+            "formset": OrderIngredientFormSet(
+                queryset=OrderIngredient.objects.none(),
+                initial=utils.get_oi_initial(ingredients),
+            ),
+        },
+    )
 
 
 @login_required(login_url="dishes:login")

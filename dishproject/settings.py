@@ -161,7 +161,7 @@ LOGGING = {
             "level": "WARNING",
             "class": "logging.handlers.RotatingFileHandler",
             "filename": BASE_DIR / "log.log",
-            "maxBytes": 1024*1024*5,
+            "maxBytes": 1024 * 1024 * 5,
             "formatter": "rotating",
             "backupCount": 1,
         },
