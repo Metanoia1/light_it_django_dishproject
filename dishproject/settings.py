@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     "django_celery_results",
     "django_celery_beat",
     "debug_toolbar",
+    "rest_framework",
+    "drf_yasg",
     "dishes.apps.DishesConfig",
 ]
 
@@ -199,31 +201,47 @@ CACHES = {
         "BACKEND": "django.core.cache.backends.memcached.PyMemcacheCache",
         "LOCATION": "127.0.0.1:11211",
     },
+    "db_cache": {
+        "BACKEND": "django.core.cache.backends.db.DatabaseCache",
+        "LOCATION": "my_cache_table",
+    },
 }
 
 # LOCALIZATION
 LANGUAGES = [("en", "English"), ("ru", "Russian")]
 LOCALE_PATHS = [os.path.join(BASE_DIR, "locale")]
 
+# DRF
+REST_FRAMEWORK = {
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    "PAGE_SIZE": 10,
+    "DATETIME_FORMAT": "%Y/%m/%d %H:%M:%S",
+}
 
-try:
-    from .settings_local import *
-except ImportError as e:
-    print(e)
+# DRF YASG
+SWAGGER_SETTINGS = {
+    "SECURITY_DEFINITIONS": {"basic": {"type": "basic"}},
+    "LOGOUT_URL": "/dishes/logout/",
+}
+
+# try:
+#     from .settings_local import *
+# except ImportError as e:
+#     print(e)
 
 
 # FOR DEPLOYING ON HEROKU
 ###############################################################################
-# import psycopg2
-# import dj_database_url
-#
-# DEBUG = False
-# ALLOWED_HOSTS = ["dishp.herokuapp.com"]
-# MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
-# STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-# STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-# DATABASE_URL = os.environ["DATABASE_URL"]
-# conn = psycopg2.connect(DATABASE_URL, sslmode="require")
-# DATABASES = {
-#     "default": dj_database_url.config(conn_max_age=600, ssl_require=True),
-# }
+import psycopg2
+import dj_database_url
+
+DEBUG = False
+ALLOWED_HOSTS = ["dishp.herokuapp.com"]
+MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+DATABASE_URL = os.environ["DATABASE_URL"]
+conn = psycopg2.connect(DATABASE_URL, sslmode="require")
+DATABASES = {
+    "default": dj_database_url.config(conn_max_age=600, ssl_require=True),
+}

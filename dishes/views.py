@@ -70,12 +70,12 @@ class DishList(ListView):
 
     def get_queryset(self):
         content = self.request.GET
-        mem_cache = caches["default"]
-        dishes = mem_cache.get("dishes_list", [])
+        my_cache = caches["db_cache"]
+        dishes = my_cache.get("dishes_list", [])
 
         if not dishes:
             dishes = Dish.objects.all()
-            mem_cache.set("dishes_list", dishes, 120)
+            my_cache.set("dishes_list", dishes, 120)
 
         if "title" in content:
             return Dish.objects.filter(title=content.get("title", None))
