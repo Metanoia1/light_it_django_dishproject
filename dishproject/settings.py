@@ -222,6 +222,7 @@ REST_FRAMEWORK = {
 SWAGGER_SETTINGS = {
     "SECURITY_DEFINITIONS": {"basic": {"type": "basic"}},
     "LOGOUT_URL": "/dishes/logout/",
+    "LOGIN_URL": "/dishes/login/",
 }
 
 # try:
