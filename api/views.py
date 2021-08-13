@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from api.serializers import DishSerializer, DishCreationSerializer
+from api.permissions import IsStaffUser
 
 from dishes.models import Dish, DishIngredient, Ingredient
 
@@ -12,11 +13,13 @@ from dishes.models import Dish, DishIngredient, Ingredient
 class DishCrudViewSet(viewsets.ModelViewSet):
     queryset = Dish.objects.all()
     serializer_class = DishSerializer
+    permission_classes = [IsStaffUser]
 
 
 class DishCreateView(generics.GenericAPIView):
     queryset = Dish.objects.all()
     serializer_class = DishCreationSerializer
+    permission_classes = [IsStaffUser]
 
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)

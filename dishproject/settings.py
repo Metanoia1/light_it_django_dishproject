@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import os
 from pathlib import Path
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -37,13 +38,11 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-
     "django_celery_results",
     "django_celery_beat",
     "debug_toolbar",
     "rest_framework",
     "drf_yasg",
-
     "dishes.apps.DishesConfig",
 ]
 
@@ -215,6 +214,12 @@ LOCALE_PATHS = [os.path.join(BASE_DIR, "locale")]
 
 # DRF
 REST_FRAMEWORK = {
+    "DEFAULT_PERMISSION_CLASSES": (
+        "rest_framework.permissions.IsAuthenticatedOrReadOnly",
+    ),
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ),
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": 10,
     "DATETIME_FORMAT": "%Y/%m/%d %H:%M:%S",
@@ -227,24 +232,32 @@ SWAGGER_SETTINGS = {
     "LOGIN_URL": "/dishes/login/",
 }
 
-# try:
-#     from .settings_local import *
-# except ImportError as e:
-#     print(e)
+# JWT
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=50),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+    "AUTH_HEADER_TYPES": ("Bearer",),
+    "AUTH_HEADER_NAME": "HTTP_AUTHORIZATION",
+}
+
+try:
+    from .settings_local import *
+except ImportError as e:
+    print(e)
 
 
 # FOR DEPLOYING ON HEROKU
 ###############################################################################
-import psycopg2
-import dj_database_url
-
-DEBUG = False
-ALLOWED_HOSTS = ["dishp.herokuapp.com"]
-MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-DATABASE_URL = os.environ["DATABASE_URL"]
-conn = psycopg2.connect(DATABASE_URL, sslmode="require")
-DATABASES = {
-    "default": dj_database_url.config(conn_max_age=600, ssl_require=True),
-}
+# import psycopg2
+# import dj_database_url
+#
+# DEBUG = False
+# ALLOWED_HOSTS = ["dishp.herokuapp.com"]
+# MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
+# STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+# STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+# DATABASE_URL = os.environ["DATABASE_URL"]
+# conn = psycopg2.connect(DATABASE_URL, sslmode="require")
+# DATABASES = {
+#     "default": dj_database_url.config(conn_max_age=600, ssl_require=True),
+# }

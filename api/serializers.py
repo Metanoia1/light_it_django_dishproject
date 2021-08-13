@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
-from dishes.models import Dish, Ingredient, DishIngredient
+from dishes.models import Dish, Ingredient
+from api.validators import has_numbers
 
 
 class DishSerializer(serializers.HyperlinkedModelSerializer):
@@ -21,6 +22,7 @@ class IngredientSerializer(serializers.Serializer):
 
 
 class DishCreationSerializer(serializers.ModelSerializer):
+    title = serializers.CharField(max_length=100, validators=[has_numbers])
     ingredients = IngredientSerializer(many=True)
     created_at = serializers.DateTimeField(format="iso-8601", read_only=True)
 
