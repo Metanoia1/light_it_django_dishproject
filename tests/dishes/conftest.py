@@ -48,7 +48,12 @@ def d4(db):
 
 @pytest.fixture
 def user(db):
-    return User.objects.create(username="username", password="password")
+    return User.objects.create(
+        username="username",
+        password="password",
+        is_staff=True,
+        is_superuser=True,
+    )
 
 
 @pytest.fixture

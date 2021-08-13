@@ -88,7 +88,7 @@ class DishDetail(DetailView):
     context_object_name = "dish"
 
     def get_queryset(self):
-        return Dish.objects.prefetch_related("di__ingredient")
+        return Dish.objects.prefetch_related("dishingredients__ingredient")
 
 
 class OrderList(LoginRequiredMixin, ListView):
@@ -99,7 +99,9 @@ class OrderList(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         if self.request.user.is_authenticated:
-            return self.request.user.orders.prefetch_related("oi__ingredient")
+            return self.request.user.orders.prefetch_related(
+                "orderingredients__ingredient"
+            )
         return Order.objects.none()
 
 
@@ -124,7 +126,7 @@ class DishFilter(ListView):
 @login_required(login_url="dishes:login")
 def create_order(request, dish_id):
     dish = get_object_or_404(Dish, pk=dish_id)
-    ingredients = dish.di.select_related("ingredient")
+    ingredients = dish.dishingredients.select_related("ingredient")
     amount = ingredients.count()
     OrderIngredientFormSet = utils.get_oi_formset(extra=amount, max_num=amount)
 

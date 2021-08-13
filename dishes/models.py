@@ -11,7 +11,7 @@ class Ingredient(models.Model):
 
 class Dish(models.Model):
     title = models.CharField(max_length=50, unique=True)
-    description = models.TextField(max_length=200, null=True, blank=True)
+    description = models.TextField(max_length=200, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     ingredients = models.ManyToManyField(
         Ingredient,
@@ -54,9 +54,11 @@ class IngredientAmount(models.Model):
 
 
 class DishIngredient(IngredientAmount):
-    dish = models.ForeignKey(Dish, on_delete=models.CASCADE, related_name="di")
+    dish = models.ForeignKey(
+        Dish, on_delete=models.CASCADE, related_name="dishingredients"
+    )
     ingredient = models.ForeignKey(
-        Ingredient, on_delete=models.CASCADE, related_name="di"
+        Ingredient, on_delete=models.CASCADE, related_name="dishingredients"
     )
 
 
@@ -64,10 +66,10 @@ class OrderIngredient(IngredientAmount):
     order = models.ForeignKey(
         Order,
         on_delete=models.CASCADE,
-        related_name="oi",
+        related_name="orderingredients",
     )
     ingredient = models.ForeignKey(
         Ingredient,
         on_delete=models.CASCADE,
-        related_name="oi",
+        related_name="orderingredients",
     )

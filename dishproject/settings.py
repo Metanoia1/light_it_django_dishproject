@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "debug_toolbar",
     "rest_framework",
     "drf_yasg",
+    "django_filters",
     "dishes.apps.DishesConfig",
 ]
 
@@ -214,6 +215,9 @@ LOCALE_PATHS = [os.path.join(BASE_DIR, "locale")]
 
 # DRF
 REST_FRAMEWORK = {
+    "DEFAULT_FILTER_BACKENDS": [
+        "django_filters.rest_framework.DjangoFilterBackend"
+    ],
     "DEFAULT_PERMISSION_CLASSES": (
         "rest_framework.permissions.IsAuthenticatedOrReadOnly",
     ),
@@ -239,6 +243,7 @@ SIMPLE_JWT = {
     "AUTH_HEADER_TYPES": ("Bearer",),
     "AUTH_HEADER_NAME": "HTTP_AUTHORIZATION",
 }
+
 
 try:
     from .settings_local import *

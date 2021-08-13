@@ -17,7 +17,7 @@
     <hr>
   {% endif %}
 
-  {% for item in dish.di.all %}
+  {% for item in dish.dishingredients.all %}
     <p>
       <strong>{{ ingredient }}:</strong> {{ item.ingredient.title }},
       <strong>{{ amount }}:</strong> {{ item.amount }}

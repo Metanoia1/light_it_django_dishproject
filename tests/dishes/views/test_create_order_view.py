@@ -8,14 +8,14 @@ from dishes.utils import get_oi_initial, get_oi_formset
 
 def test_get_dish_object(client, user, d1):
     client.force_login(user)
-    resp = client.get(f"/dishes/order/{d1.id}", follow=True)
+    resp = client.get(f"/dishes/order/{d1.id}/")
     assert resp.context["dish"].pk == d1.pk
     assert resp.status_code == 200
 
 
 def test_get_dish_object_does_not_exist(client, user):
     client.force_login(user)
-    resp = client.get(f"/dishes/order/1", follow=True)
+    resp = client.get(f"/dishes/order/1/")
     assert resp.status_code == 404
 
 
@@ -27,7 +27,7 @@ def test_formset_is_valid(client, user):
     dish.ingredients.set(
         Ingredient.objects.create(title=name) for name in ingredient_names
     )
-    ingredients = dish.di.select_related("ingredient")
+    ingredients = dish.dishingredients.select_related("ingredient")
     amount = ingredients.count()
     data = {
         "form-TOTAL_FORMS": amount,
@@ -41,7 +41,7 @@ def test_formset_is_valid(client, user):
         "form-2-ingredient": "watermelon",
         "form-2-amount": "5",
     }
-    resp = client.post(f"/dishes/order/{dish.id}", data=data)
+    resp = client.post(f"/dishes/order/{dish.id}/", data=data)
     assert resp.status_code == 302
     assert Order.objects.count() == 1
     assert Order.objects.first().ingredients.count() == 3
@@ -59,7 +59,7 @@ def test_formset_is_not_valid(client, user):
     dish.ingredients.set(
         Ingredient.objects.create(title=name) for name in ingredient_names
     )
-    ingredients = dish.di.select_related("ingredient")
+    ingredients = dish.dishingredients.select_related("ingredient")
     amount = ingredients.count()
     data = {
         "form-TOTAL_FORMS": amount,
@@ -73,6 +73,6 @@ def test_formset_is_not_valid(client, user):
         "form-2-ingredient": "watermelon",
         "form-2-amount": "xxx",
     }
-    resp = client.post(f"/dishes/order/{dish.id}", data=data)
+    resp = client.post(f"/dishes/order/{dish.id}/", data=data)
     assert resp.status_code == 302
     assert Order.objects.count() == 0

@@ -17,7 +17,7 @@
   {% for order in orders %}
     <p><strong>{{ orderid }}: </strong>{{ order.id }}</p>
     <p><strong>{{ dish }}: </strong>{{ order.dish.title }}</p>
-    {% for item in order.oi.all %}
+    {% for item in order.orderingredients.all %}
     <p>
       <strong>{{ ingredient }}:</strong> {{ item.ingredient.title }},
       <strong>{{ amount }}:</strong> {{ item.amount }}
