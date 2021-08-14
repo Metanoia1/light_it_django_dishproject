@@ -1,14 +1,8 @@
-from django.urls import path, include
-
-from rest_framework import routers
+from django.urls import path
 
 from api import views
 
 
-router = routers.DefaultRouter()
-router.register(r"dishes", views.DishCrudViewSet)
-
-
 urlpatterns = [
-    path("", include(router.urls)),
+    path("dishes/", views.DishListCreateView.as_view(), name="list_create"),
 ]
