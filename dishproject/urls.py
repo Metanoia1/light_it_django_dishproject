@@ -47,8 +47,8 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path("", default_view),
-    path("dishes/", include("dishes.urls")),
     path("admin/", admin.site.urls),
+    path("dishes/", include("dishes.urls")),
     path("i18n/", include("django.conf.urls.i18n")),
     path("api/", include("api.urls")),
     path(

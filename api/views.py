@@ -1,13 +1,14 @@
 from django_filters.rest_framework import DjangoFilterBackend
 
+from rest_framework import generics, mixins, status
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.response import Response
 from rest_framework.generics import get_object_or_404
-from rest_framework import generics, mixins, status
 
-from api.serializers import DishSerializer, DishCreationSerializer
-from api.permissions import IsStaffUser
 from api.filters import DishDateTimeFilter
+from api.permissions import IsStaffUser
+from api.serializers import DishSerializer, DishCreationSerializer
+
 from dishes.models import Dish, Ingredient, DishIngredient
 
 
@@ -48,3 +49,24 @@ class DishListCreateView(mixins.ListModelMixin, generics.GenericAPIView):
             )
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class DishRUDView(
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    mixins.DestroyModelMixin,
+    generics.GenericAPIView,
+):
+
+    queryset = Dish.objects.all()
+    permission_classes = [IsStaffUser]
+    serializer_class = DishSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
