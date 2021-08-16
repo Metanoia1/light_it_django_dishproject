@@ -20,13 +20,13 @@ class DishCRUDView(viewsets.ModelViewSet):
     ordering_fields = ["created_at"]
     filterset_class = DishDateTimeFilter
 
-    def get_serializer_class(self):
+    def get_serializer_class(self, *args, **kwargs):
         if self.action == "create":
             return DishCreateSerializer
         return DishListSerializer
 
     def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer_class(request)
+        serializer = self.get_serializer_class()(data=request.data)
         serializer.is_valid(raise_exception=True)
         service = DishModelService()
         return service.create(serializer.data)
