@@ -1,18 +1,17 @@
 from django_filters.rest_framework import DjangoFilterBackend
 
-from rest_framework import generics, mixins, status
+from rest_framework import viewsets
 from rest_framework.filters import SearchFilter, OrderingFilter
-from rest_framework.response import Response
-from rest_framework.generics import get_object_or_404
 
 from api.filters import DishDateTimeFilter
+from api.services import DishModelService
 from api.permissions import IsStaffUser
-from api.serializers import DishSerializer, DishCreationSerializer
+from api.serializers import DishListSerializer, DishCreateSerializer
 
-from dishes.models import Dish, Ingredient, DishIngredient
+from dishes.models import Dish
 
 
-class DishListCreateView(mixins.ListModelMixin, generics.GenericAPIView):
+class DishCRUDView(viewsets.ModelViewSet):
     queryset = Dish.objects.all()
     permission_classes = [IsStaffUser]
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
@@ -22,51 +21,12 @@ class DishListCreateView(mixins.ListModelMixin, generics.GenericAPIView):
     filterset_class = DishDateTimeFilter
 
     def get_serializer_class(self):
-        method_post = self.request.method == "POST"
-        return DishSerializer if not method_post else DishCreationSerializer
+        if self.action == "create":
+            return DishCreateSerializer
+        return DishListSerializer
 
-    def get(self, request, *args, **kwargs):
-        return self.list(request, *args, **kwargs)
-
-    def post(self, request, *args, **kwargs):
-        serializer = self.get_serializer_class()(data=request.data)
-        if serializer.is_valid():
-            ingredients = [
-                (get_object_or_404(Ingredient, title=i["title"]), i["amount"])
-                for i in serializer.data["ingredients"]
-            ]
-            dish = Dish.objects.create(
-                title=serializer.data["title"],
-                description=serializer.data["description"],
-            )
-            DishIngredient.objects.bulk_create(
-                DishIngredient(
-                    dish=dish,
-                    ingredient=ingredient[0],
-                    amount=ingredient[1],
-                )
-                for ingredient in ingredients
-            )
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class DishRUDView(
-    mixins.RetrieveModelMixin,
-    mixins.UpdateModelMixin,
-    mixins.DestroyModelMixin,
-    generics.GenericAPIView,
-):
-
-    queryset = Dish.objects.all()
-    permission_classes = [IsStaffUser]
-    serializer_class = DishSerializer
-
-    def get(self, request, *args, **kwargs):
-        return self.retrieve(request, *args, **kwargs)
-
-    def put(self, request, *args, **kwargs):
-        return self.update(request, *args, **kwargs)
-
-    def delete(self, request, *args, **kwargs):
-        return self.destroy(request, *args, **kwargs)
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer_class(request)
+        serializer.is_valid(raise_exception=True)
+        service = DishModelService()
+        return service.create(serializer.data)

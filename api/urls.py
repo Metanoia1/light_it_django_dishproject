@@ -1,9 +1,13 @@
-from django.urls import path
+from django.urls import path, include
+
+from rest_framework import routers
 
 from api import views
 
 
+router = routers.DefaultRouter()
+router.register(r"dishes", views.DishCRUDView)
+
 urlpatterns = [
-    path("dishes/", views.DishListCreateView.as_view(), name="listcreate"),
-    path("dishes/<int:pk>", views.DishRUDView.as_view(), name="rud"),
+    path("", include(router.urls)),
 ]
