@@ -22,6 +22,6 @@ def correct_amount(value):
         raise ValidationError("the amount value should be an integer")
 
 
-def is_title_exists(string):
-    if not Ingredient.objects.filter(title=string):
-        raise ValidationError(f"Ingredient title '{string}' does not exists")
+def is_ingredient_exists(id_):
+    if not Ingredient.objects.filter(id=id_):
+        raise ValidationError(f"Ingredient with id:'{id_}' does not exists")

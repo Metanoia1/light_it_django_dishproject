@@ -5,7 +5,7 @@ from api.validators import (
     has_numbers,
     already_exists,
     correct_amount,
-    is_title_exists,
+    is_ingredient_exists,
 )
 
 
@@ -14,10 +14,10 @@ class IngredientListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = DishIngredient
-        fields = ["title", "ingredient", "amount"]
+        fields = ["ingredient", "title", "amount"]
 
 
-class DishListSerializer(serializers.ModelSerializer):
+class DishListSerializer(serializers.HyperlinkedModelSerializer):
     title = serializers.CharField(max_length=50, validators=[has_numbers])
     created_at = serializers.DateTimeField(format="iso-8601", read_only=True)
     ingredients = serializers.SerializerMethodField()
@@ -29,11 +29,11 @@ class DishListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Dish
-        fields = "__all__"
+        fields = ["url", "title", "description", "created_at", "ingredients"]
 
 
 class IngredientCreateSerializer(serializers.Serializer):
-    title = serializers.CharField(max_length=50, validators=[is_title_exists])
+    ingredient_id = serializers.IntegerField(validators=[is_ingredient_exists])
     amount = serializers.IntegerField(validators=[correct_amount])
 
 
@@ -41,9 +41,9 @@ class DishCreateSerializer(serializers.ModelSerializer):
     title = serializers.CharField(
         max_length=50, validators=[has_numbers, already_exists]
     )
-    ingredients = IngredientCreateSerializer(many=True)
     created_at = serializers.DateTimeField(format="iso-8601", read_only=True)
+    ingredients = IngredientCreateSerializer(many=True)
 
     class Meta:
         model = Dish
-        fields = "__all__"
+        fields = ["id", "title", "description", "created_at", "ingredients"]

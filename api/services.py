@@ -8,7 +8,7 @@ from dishes.models import Dish, Ingredient, DishIngredient
 class DishModelService:
     def create(self, data):
         ingredients = [
-            (get_object_or_404(Ingredient, title=i["title"]), i["amount"])
+            (get_object_or_404(Ingredient, pk=i["ingredient_id"]), i["amount"])
             for i in data["ingredients"]
         ]
         dish = Dish.objects.create(
@@ -23,4 +23,11 @@ class DishModelService:
             )
             for ingredient in ingredients
         )
+        data = {
+            "id": dish.id,
+            "title": data["title"],
+            "description": data["description"],
+            "created_at": dish.created_at,
+            "ingredients": data["ingredients"],
+        }
         return Response(data, status=status.HTTP_201_CREATED)
