@@ -1,3 +1,6 @@
+from django.db.models import Count
+from django.core.cache import caches
+
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.generics import get_object_or_404
@@ -31,3 +34,15 @@ class DishModelService:
             "ingredients": data["ingredients"],
         }
         return Response(data, status=status.HTTP_201_CREATED)
+
+    def get_top_dishes(self, top_number):
+        my_cache = caches["db_cache"]
+        dishes = my_cache.get("dishes_list", [])
+        if not dishes:
+            dishes = (
+                Dish.objects.all()
+                .annotate(orders_count=Count("orders"))
+                .order_by("-orders_count")[:top_number]
+            )
+            my_cache.set("dishes_list", dishes, 120)
+        return dishes

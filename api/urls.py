@@ -10,4 +10,5 @@ router.register(r"dishes", views.DishCRUDView)
 
 urlpatterns = [
     path("", include(router.urls)),
+    path("topdishes/", views.MostPopularDishView.as_view(), name="topdishes"),
 ]

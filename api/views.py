@@ -1,6 +1,6 @@
 from django_filters.rest_framework import DjangoFilterBackend
 
-from rest_framework import viewsets
+from rest_framework import viewsets, mixins, generics
 from rest_framework.filters import SearchFilter, OrderingFilter
 
 from api.filters import DishDateTimeFilter
@@ -30,3 +30,11 @@ class DishCRUDView(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         service = DishModelService()
         return service.create(serializer.data)
+
+
+class MostPopularDishView(mixins.ListModelMixin, generics.GenericAPIView):
+    queryset = DishModelService().get_top_dishes(3)
+    serializer_class = DishListSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
