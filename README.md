@@ -3,6 +3,14 @@
 
 # DOCKER LECTION
 ```
+pip install -r requirements.txt
+
+```
+```
+python manage.py createcachetable
+
+```
+```
 python manage.py makemigrations
 
 ```
