@@ -1,7 +1,7 @@
 FROM python:3.8-slim
 
 RUN apt update && apt install -y \
-    gcc build-essential python3-dev libpq-dev libmemcached-dev zlib1g-dev python3-dev && \
+    gcc build-essential libpq-dev libmemcached-dev zlib1g-dev python3-dev && \
     rm -rf /var/lib/apt/lists*
 
 WORKDIR .
