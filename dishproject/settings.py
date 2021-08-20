@@ -21,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ["SK"]
+SECRET_KEY = "DOCKERaslkdfjsalsadf6a8f768sa76f873h73yr8w3h8*&T^*&F^*D^F*SD&^F*"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -86,12 +86,12 @@ WSGI_APPLICATION = "dishproject.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.sqlite3",
-#         "NAME": BASE_DIR / "db.sqlite3",
-#     }
-# }
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
+    }
+}
 
 
 # Password validation
@@ -253,16 +253,16 @@ SIMPLE_JWT = {
 
 # FOR DEPLOYING ON HEROKU
 ###############################################################################
-import psycopg2
-import dj_database_url
-
-DEBUG = False
-ALLOWED_HOSTS = ["dishp.herokuapp.com"]
-MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-DATABASE_URL = os.environ["DATABASE_URL"]
-conn = psycopg2.connect(DATABASE_URL, sslmode="require")
-DATABASES = {
-    "default": dj_database_url.config(conn_max_age=600, ssl_require=True),
-}
+# import psycopg2
+# import dj_database_url
+#
+# DEBUG = False
+# ALLOWED_HOSTS = ["dishp.herokuapp.com"]
+# MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
+# STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+# STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+# DATABASE_URL = os.environ["DATABASE_URL"]
+# conn = psycopg2.connect(DATABASE_URL, sslmode="require")
+# DATABASES = {
+#     "default": dj_database_url.config(conn_max_age=600, ssl_require=True),
+# }
