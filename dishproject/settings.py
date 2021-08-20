@@ -197,18 +197,6 @@ CELERY_BEAT_SCHEDULE = {
     }
 }
 
-# CACHE
-CACHES = {
-    "default": {
-        "BACKEND": "django.core.cache.backends.memcached.PyMemcacheCache",
-        "LOCATION": "127.0.0.1:11211",
-    },
-    "db_cache": {
-        "BACKEND": "django.core.cache.backends.db.DatabaseCache",
-        "LOCATION": "my_cache_table",
-    },
-}
-
 # LOCALIZATION
 LANGUAGES = [("en", "English"), ("ru", "Russian")]
 LOCALE_PATHS = [os.path.join(BASE_DIR, "locale")]

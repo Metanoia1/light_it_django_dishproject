@@ -4,7 +4,6 @@ import codecs
 from datetime import timedelta
 
 from django.urls import reverse
-from django.core.cache import caches
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -70,16 +69,10 @@ class DishList(ListView):
 
     def get_queryset(self):
         content = self.request.GET
-        my_cache = caches["db_cache"]
-        dishes = my_cache.get("dishes_list", [])
-
-        if not dishes:
-            dishes = Dish.objects.all()
-            my_cache.set("dishes_list", dishes, 120)
 
         if "title" in content:
             return Dish.objects.filter(title=content.get("title", None))
-        return dishes
+        return Dish.objects.all()
 
 
 class DishDetail(DetailView):
