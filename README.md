@@ -3,9 +3,6 @@
 
 # DOCKER LECTION
 ```
-sudo apt update && apt install -y gcc build-essential libpq-dev libmemcached-dev zlib1g-dev python3-dev
-```
-```
 git clone https://github.com/Metanoia1/light_it_django_dishproject.git
 
 ```
@@ -17,7 +14,7 @@ cd light_it_django_dishproject
 git checkout docker_lection
 
 ```
-ACTIVATE YOUR ENV AND:
+ACTIVATE YOUR VIRTUAL ENV AND:
 ```
 pip install -r requirements.txt
 
