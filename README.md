@@ -3,6 +3,9 @@
 
 # DOCKER LECTION
 ```
+sudo apt update && apt install -y gcc build-essential libpq-dev libmemcached-dev zlib1g-dev python3-dev
+```
+```
 git clone https://github.com/Metanoia1/light_it_django_dishproject.git
 
 ```
@@ -31,12 +34,10 @@ python manage.py migrate
 python manage.py createsuperuser
 
 ```
-
 ```
 docker build -f Dockerfile --tag app:latest .
 
 ```
-
 ```
 docker run -d -p 8082:8000 app
 
