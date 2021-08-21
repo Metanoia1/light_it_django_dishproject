@@ -1,5 +1,9 @@
 FROM python:3.8-slim
 
+RUN useradd -u 8877 john
+
+USER john
+
 RUN apt update && apt install -y \
     build-essential libpq-dev libmemcached-dev zlib1g-dev python3-dev gcc && \
     rm -rf /var/lib/apt/lists*
