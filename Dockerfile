@@ -1,16 +1,16 @@
 FROM python:3.8-slim
 
 RUN apt update && apt install -y \
-    gcc build-essential libpq-dev libmemcached-dev zlib1g-dev python3-dev && \
+    build-essential libpq-dev libmemcached-dev zlib1g-dev python3-dev gcc && \
     rm -rf /var/lib/apt/lists*
 
-WORKDIR .
+WORKDIR /app
 
 COPY ./requirements.txt .
 
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . .
+COPY . /app
 
 EXPOSE 8000
 

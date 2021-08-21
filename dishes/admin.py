@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Ingredient, Dish, Order, DishIngredient, OrderIngredient
+from .models import Ingredient, Dish, Order
 
 
 class DishIngredientInline(admin.TabularInline):
@@ -24,5 +24,3 @@ class OrderAdmin(admin.ModelAdmin):
 admin.site.register(Ingredient)
 admin.site.register(Dish, DishAdmin)
 admin.site.register(Order, OrderAdmin)
-admin.site.register(DishIngredient)
-admin.site.register(OrderIngredient)
