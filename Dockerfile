@@ -1,17 +1,14 @@
-FROM python:3.8-slim
+FROM python:3.8.11-slim
 
-RUN apt update && apt install -y \
-    build-essential libpq-dev libmemcached-dev zlib1g-dev python3-dev gcc && \
-    rm -rf /var/lib/apt/lists*
+RUN apt update && apt install -y build-essential
+# libpq-dev libmemcached-dev zlib1g-dev python3-dev gcc
 
 WORKDIR /app
 
-COPY ./requirements.txt .
+COPY . /app
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . /app
-
 EXPOSE 8000
 
-CMD ["gunicorn", "dishproject.wsgi:application", "-b", "0.0.0.0:8000", "--reload", "-w", "4"]
+ENTRYPOINT ["bash", "/app/entrypoint.sh"]

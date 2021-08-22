@@ -20,10 +20,6 @@ pip install -r requirements.txt
 
 ```
 ```
-python manage.py makemigrations
-
-```
-```
 python manage.py migrate 
 
 ```
@@ -32,11 +28,11 @@ python manage.py createsuperuser
 
 ```
 ```
-docker build -f Dockerfile --tag app:latest .
+docker build -f Dockerfile --tag lightit-docker-app:latest .
 
 ```
 ```
-docker run -d -p 8082:8000 app
+docker run -d -p 8082:8000 lightit-docker-app
 
 ```
 [127.0.0.1:8082/admin](http://127.0.0.1:8082/admin/)

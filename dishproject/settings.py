@@ -38,12 +38,12 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "django_celery_results",
-    "django_celery_beat",
-    "debug_toolbar",
+
     "rest_framework",
-    "drf_yasg",
     "django_filters",
+    "debug_toolbar",
+    "drf_yasg",
+
     "dishes.apps.DishesConfig",
 ]
 
@@ -181,20 +181,6 @@ LOGGING = {
             "propagate": True,
         },
     },
-}
-
-# CELERY
-from celery.schedules import crontab
-
-CELERY_ENABLE_UTC = False
-CELERY_TIMEZONE = "Europe/Kiev"
-CELERY_BROKER_URL = "redis://localhost"
-CELERY_RESULT_BACKEND = "django-db"
-CELERY_BEAT_SCHEDULE = {
-    "report_every_day_at_22pm": {
-        "task": "dishes.tasks.report",
-        "schedule": crontab(hour=22, minute=0),
-    }
 }
 
 # LOCALIZATION
