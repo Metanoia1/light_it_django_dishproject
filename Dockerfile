@@ -1,7 +1,6 @@
 FROM python:3.8.11-slim
 
 RUN apt update && apt install -y build-essential
-# libpq-dev libmemcached-dev zlib1g-dev python3-dev gcc
 
 WORKDIR /app
 
