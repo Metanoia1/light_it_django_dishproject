@@ -1,8 +1,3 @@
-from django.db.models import Count
-from django.core.cache import caches
-
-from rest_framework import status
-from rest_framework.response import Response
 from rest_framework.generics import get_object_or_404
 
 from dishes.models import Dish, Ingredient, DishIngredient
@@ -26,18 +21,10 @@ class DishModelService:
             )
             for ingredient in ingredients
         )
-        data = {
+        return {
             "id": dish.id,
             "title": data["title"],
             "description": data["description"],
             "created_at": dish.created_at,
             "ingredients": data["ingredients"],
         }
-        return Response(data, status=status.HTTP_201_CREATED)
-
-    def get_top_dishes(self, top_number):
-        return (
-            Dish.objects.all()
-            .annotate(orders_count=Count("orders"))
-            .order_by("-orders_count")[:top_number]
-        )
