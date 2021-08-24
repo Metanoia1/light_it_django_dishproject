@@ -10,4 +10,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 EXPOSE 8000
 
+ENV SK sldkfjl&^SDFF^S*V^*&^SD*^G*S^G*S&^F*xc#@$Gd2321DS#
+
 ENTRYPOINT ["bash", "/app/entrypoint.sh"]
