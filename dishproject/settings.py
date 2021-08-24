@@ -85,16 +85,16 @@ WSGI_APPLICATION = "dishproject.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": os.getenv("DISH_NAME"),
-        "USER": os.getenv("DISH_USER"),
-        "PASSWORD": os.getenv("DISH_PASS"),
-        "HOST": os.getenv("DISH_HOST"),
-        "PORT": os.getenv("DISH_PORT"),
-    }
-}
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql_psycopg2",
+#         "NAME": os.getenv("DISH_NAME"),
+#         "USER": os.getenv("DISH_USER"),
+#         "PASSWORD": os.getenv("DISH_PASS"),
+#         "HOST": os.getenv("DISH_HOST"),
+#         "PORT": os.getenv("DISH_PORT"),
+#     }
+# }
 
 
 # Password validation
@@ -250,16 +250,16 @@ SIMPLE_JWT = {
 
 # FOR DEPLOYING ON HEROKU
 ###############################################################################
-# import psycopg2
-# import dj_database_url
-#
-# DEBUG = False
-# ALLOWED_HOSTS = ["dishp.herokuapp.com"]
-# MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
-# STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-# STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-# DATABASE_URL = os.environ["DATABASE_URL"]
-# conn = psycopg2.connect(DATABASE_URL, sslmode="require")
-# DATABASES = {
-#     "default": dj_database_url.config(conn_max_age=600, ssl_require=True),
-# }
+import psycopg2
+import dj_database_url
+
+DEBUG = False
+ALLOWED_HOSTS = ["dishp.herokuapp.com"]
+MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+DATABASE_URL = os.environ["DATABASE_URL"]
+conn = psycopg2.connect(DATABASE_URL, sslmode="require")
+DATABASES = {
+    "default": dj_database_url.config(conn_max_age=600, ssl_require=True),
+}
