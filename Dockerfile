@@ -1,15 +1,11 @@
-FROM python:3.8.11-slim
+FROM python:3
 
-RUN apt update && apt install -y build-essential
+RUN apt-get update && apt-get install -y python3-dev libpq-dev gcc libmemcached-dev zlib1g-dev
 
-WORKDIR /app
+WORKDIR /usr/src/app
 
-COPY . /app
+COPY . .
 
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install -r requirements.txt
 
-EXPOSE 8000
-
-ENV SK sldkfjl&^SDFF^S*V^*&^SD*^G*S^G*S&^F*xc#@$Gd2321DS#
-
-ENTRYPOINT ["bash", "/app/entrypoint.sh"]
+ENTRYPOINT ["bash", "/usr/src/app/entrypoint.sh"]

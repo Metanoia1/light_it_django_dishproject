@@ -1,0 +1,21 @@
+version: "3"
+
+services:
+  web:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    environment:
+      - SK=asldkfj98sdfusa98df7s9dfskdjf23klsdjfllk
+    volumes:
+      - ./:/usr/src/app
+    ports:
+      - "8000:8000"
+  nginx:
+    build:
+      context: ./docker/nginx
+      dockerfile: Dockerfile
+    depends_on:
+      - web
+    ports:
+      - "80:80"

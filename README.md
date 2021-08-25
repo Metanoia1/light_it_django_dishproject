@@ -28,11 +28,11 @@ python manage.py createsuperuser
 
 ```
 ```
-docker build -f Dockerfile --tag lightit-docker-app:latest .
+docker-compose build
 
 ```
 ```
-docker run -d -p 8082:8000 lightit-docker-app
+docker-compose up
 
 ```
-[127.0.0.1:8082/admin](http://127.0.0.1:8082/admin/)
+[localhost/admin](http://127.0.0.1/admin/)
