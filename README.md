@@ -10,7 +10,7 @@ cd light_it_django_dishproject
 
 ```
 ```
-git checkout docker_lection
+git checkout docker_celery
 
 ```
 ```
