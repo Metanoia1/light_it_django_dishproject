@@ -21,12 +21,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv("SK")
+SECRET_KEY = os.environ["SK"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -38,12 +38,12 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-
-    "rest_framework",
-    "django_filters",
+    "django_celery_results",
+    "django_celery_beat",
     "debug_toolbar",
+    "rest_framework",
     "drf_yasg",
-
+    "django_filters",
     "dishes.apps.DishesConfig",
 ]
 
@@ -85,7 +85,6 @@ WSGI_APPLICATION = "dishproject.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
@@ -183,6 +182,32 @@ LOGGING = {
     },
 }
 
+# CELERY
+from celery.schedules import crontab
+
+CELERY_ENABLE_UTC = False
+CELERY_TIMEZONE = "Europe/Kiev"
+CELERY_BROKER_URL = "redis://localhost"
+CELERY_RESULT_BACKEND = "django-db"
+CELERY_BEAT_SCHEDULE = {
+    "report_every_day_at_22pm": {
+        "task": "dishes.tasks.report",
+        "schedule": crontab(hour=20, minute=51),
+    }
+}
+
+# CACHE
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.memcached.PyMemcacheCache",
+        "LOCATION": "127.0.0.1:11211",
+    },
+    "db_cache": {
+        "BACKEND": "django.core.cache.backends.db.DatabaseCache",
+        "LOCATION": "my_cache_table",
+    },
+}
+
 # LOCALIZATION
 LANGUAGES = [("en", "English"), ("ru", "Russian")]
 LOCALE_PATHS = [os.path.join(BASE_DIR, "locale")]
@@ -217,12 +242,6 @@ SIMPLE_JWT = {
     "AUTH_HEADER_TYPES": ("Bearer",),
     "AUTH_HEADER_NAME": "HTTP_AUTHORIZATION",
 }
-
-
-# try:
-#     from .settings_local import *
-# except ImportError as e:
-#     print(e)
 
 
 # FOR DEPLOYING ON HEROKU

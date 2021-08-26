@@ -7,28 +7,44 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('dishes', '0002_alter_dish_description'),
+        ("dishes", "0002_alter_dish_description"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='dishingredient',
-            name='dish',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='dishingredients', to='dishes.dish'),
+            model_name="dishingredient",
+            name="dish",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="dishingredients",
+                to="dishes.dish",
+            ),
         ),
         migrations.AlterField(
-            model_name='dishingredient',
-            name='ingredient',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='dishingredients', to='dishes.ingredient'),
+            model_name="dishingredient",
+            name="ingredient",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="dishingredients",
+                to="dishes.ingredient",
+            ),
         ),
         migrations.AlterField(
-            model_name='orderingredient',
-            name='ingredient',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='orderingredients', to='dishes.ingredient'),
+            model_name="orderingredient",
+            name="ingredient",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="orderingredients",
+                to="dishes.ingredient",
+            ),
         ),
         migrations.AlterField(
-            model_name='orderingredient',
-            name='order',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='orderingredients', to='dishes.order'),
+            model_name="orderingredient",
+            name="order",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="orderingredients",
+                to="dishes.order",
+            ),
         ),
     ]
