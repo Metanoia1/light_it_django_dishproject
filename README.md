@@ -23,7 +23,7 @@ git checkout docker_lection
 
 ```
 ```
-sudo apt-get update && apt-get install -y python3-dev libpq-dev gcc libmemcached-dev zlib1g-dev
+sudo apt-get update && sudo apt-get install -y python3-dev libpq-dev gcc libmemcached-dev zlib1g-dev
 ```
 ACTIVATE YOUR VIRTUAL ENV AND:
 ```
