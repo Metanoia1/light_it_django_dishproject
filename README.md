@@ -14,6 +14,19 @@ git checkout docker_lection
 
 ```
 ```
+sudo apt-get update && apt-get install -y python3-dev libpq-dev gcc libmemcached-dev zlib1g-dev
+```
+ACTIVATE YOUR VIRTUAL ENV AND:
+```
+pip install -r requirements.txt
+```
+```
+python manage.py migrate
+```
+```
+python manage.py createsuperuser
+```
+```
 docker-compose build
 
 ```
