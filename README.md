@@ -1,6 +1,6 @@
 [dishp.herokuapp.com](https://dishp.herokuapp.com)
 
-# DOCKER LECTION
+# DOCKER CELERY
 ```
 git clone https://github.com/Metanoia1/light_it_django_dishproject.git
 
