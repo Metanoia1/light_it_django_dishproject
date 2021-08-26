@@ -1,21 +1,47 @@
-version: "3"
+version: "3.8"
 
 services:
-  web:
-    build:
-      context: ./
-      dockerfile: Dockerfile
-    environment:
-      - SK=asldkfj98sdfusa98df7s9dfskdjf23klsdjfllk
-    volumes:
-      - ./:/usr/src/app
-    ports:
-      - "8000:8000"
-  nginx:
-    build:
-      context: ./docker/nginx
-      dockerfile: Dockerfile
-    depends_on:
-      - web
-    ports:
-      - "80:80"
+    django:
+        build: .
+        container_name: django
+        command: python manage.py runserver 0.0.0.0:8000
+        volumes:
+            - .:/usr/src/app/
+        ports:
+            - "8000:8000"
+        environment:
+            - SK=ksjad989asdj9sd9j9sdjf9asdf9ja9sdf9jadflk9
+            - DEBUG=1
+            - DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]
+            - CELERY_BROKER=redis://redis:6379/0
+            - CELERY_BACKEND=redis://redis:6379/0
+        depends_on:
+            - pgdb
+            - redis
+    celery:
+        build: .
+        command: celery -A dishproject worker -l INFO
+        volumes:
+            - .:/usr/src/app
+        environment:
+            - SK=ksjad989asdj9sd9j9sdjf9asdf9ja9sdf9jadflk9
+            - DEBUG=1
+            - DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]
+            - CELERY_BROKER=redis://redis:6379/0
+            - CELERY_BACKEND=redis://redis:6379/0
+        depends_on:
+            - django
+            - redis
+    pgdb:
+        image: postgres
+        container_name: pgdb
+        environment:
+            - POSTGRES_DB=postgres
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=postgres
+        volumes:
+            - pgdata:/var/lib/postgresql/data/
+    redis:
+        image: "redis:alpine"
+volumes:
+    pgdata:

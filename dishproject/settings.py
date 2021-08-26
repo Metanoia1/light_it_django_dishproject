@@ -187,8 +187,8 @@ from celery.schedules import crontab
 
 CELERY_ENABLE_UTC = False
 CELERY_TIMEZONE = "Europe/Kiev"
-CELERY_BROKER_URL = "redis://localhost"
-CELERY_RESULT_BACKEND = "django-db"
+CELERY_BROKER_URL = os.environ.get("CELERY_BROKER", "redis://redis:6379/0")
+CELERY_RESULT_BACKEND = os.environ.get("CELERY_BROKER", "redis://redis:6379/0")
 CELERY_BEAT_SCHEDULE = {
     "report_every_day_at_22pm": {
         "task": "dishes.tasks.report",

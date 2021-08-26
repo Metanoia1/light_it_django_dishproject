@@ -10,6 +10,11 @@ from .models import Order
 
 
 @shared_task
+def add(x, y):
+    return x + y
+
+
+@shared_task
 def report():
     with open(BASE_DIR / "report.csv", "w", newline="") as csvfile:
         writer = csv.writer(csvfile, delimiter=",")
