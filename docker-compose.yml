@@ -1,9 +1,9 @@
 version: "3.8"
 
 services:
-    django:
+    backend:
         build: .
-        container_name: django
+        container_name: dishproject
         command: python manage.py runserver 0.0.0.0:8000
         volumes:
             - .:/usr/src/app/
@@ -11,25 +11,25 @@ services:
             - "8000:8000"
         environment:
             - SK=ksjad989asdj9sd9j9sdjf9asdf9ja9sdf9jadflk9
-            - DEBUG=1
-            - DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]
-            - CELERY_BROKER=redis://redis:6379/0
-            - CELERY_BACKEND=redis://redis:6379/0
+            - C_DEBUG=1
+            - C_TIMEZONE=Europe/Kiev
+            - C_BROKER=redis://redis:6379/0
+            - C_BACKEND=redis://redis:6379/0
         depends_on:
             - redis
     celery:
         build: .
-        command: celery -A dishproject worker -l INFO
+        command: celery -A dishproject worker -B -l INFO
         volumes:
             - .:/usr/src/app
         environment:
             - SK=ksjad989asdj9sd9j9sdjf9asdf9ja9sdf9jadflk9
-            - DEBUG=1
-            - DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]
-            - CELERY_BROKER=redis://redis:6379/0
-            - CELERY_BACKEND=redis://redis:6379/0
+            - C_DEBUG=1
+            - C_TIMEZONE=Europe/Kiev
+            - C_BROKER=redis://redis:6379/0
+            - C_BACKEND=redis://redis:6379/0
         depends_on:
-            - django
+            - backend
             - redis
     redis:
         image: "redis:alpine"

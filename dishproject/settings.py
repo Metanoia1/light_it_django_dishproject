@@ -21,10 +21,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ["SK"]
+SECRET_KEY = os.environ.get("SK", "notproductionsecretkey555@@@qqqiii111VVV")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get("C_DEBUG", True)
 
 ALLOWED_HOSTS = []
 
@@ -186,9 +186,9 @@ LOGGING = {
 from celery.schedules import crontab
 
 CELERY_ENABLE_UTC = False
-CELERY_TIMEZONE = "Europe/Kiev"
-CELERY_BROKER_URL = os.environ.get("CELERY_BROKER", "redis://redis:6379/0")
-CELERY_RESULT_BACKEND = os.environ.get("CELERY_BROKER", "redis://redis:6379/0")
+CELERY_TIMEZONE = os.environ.get("C_TIMEZONE", "Europe/Kiev")
+CELERY_BROKER_URL = os.environ.get("C_BROKER", "redis://redis:6379/0")
+CELERY_RESULT_BACKEND = os.environ.get("C_BACKEND", "redis://redis:6379/0")
 CELERY_BEAT_SCHEDULE = {
     "report_every_day_at_22pm": {
         "task": "dishes.tasks.report",
