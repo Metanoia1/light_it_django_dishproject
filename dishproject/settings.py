@@ -192,7 +192,7 @@ CELERY_RESULT_BACKEND = os.environ.get("C_BACKEND", "redis://redis:6379/0")
 CELERY_BEAT_SCHEDULE = {
     "report_every_day_at_22pm": {
         "task": "dishes.tasks.report",
-        "schedule": crontab(hour=20, minute=51),
+        "schedule": crontab(hour=22, minute=0),
     }
 }
 
