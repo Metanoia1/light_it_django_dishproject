@@ -53,8 +53,8 @@ def get_oi_initial(ingredients):
     ]
 
 
-def merge_instances_with_order(instances, order):
-    for obj in instances:
+def assign_order_for_items(items, order):
+    for obj in items:
         obj.order = order
 
 

@@ -135,7 +135,7 @@ def create_order(request, dish_id):
         if formset.is_valid():
             instances = formset.save(commit=False)
             order = Order.objects.create(dish_id=dish.id, user=request.user)
-            utils.merge_instances_with_order(instances, order)
+            utils.assign_order_for_items(instances, order)
             formset.save()
             return redirect("dishes:orders")
         logger.warning("formset is not valid: %s", request.POST)
